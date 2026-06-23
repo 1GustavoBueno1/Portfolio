@@ -1,0 +1,103 @@
+body {
+    background-color: #0d1b2a;
+    color: #e0e1dd;
+    padding: 40px;           
+    font-family: Arial, sans-serif;      
+}
+
+header {
+    min-height: 100vh;              
+    display: flex;
+    flex-direction: column;        /* nome e subtítulo empilhados */
+    justify-content: center;       /* centraliza na vertical */
+    align-items: center;           /* centraliza na horizontal */
+}
+
+.Nome {
+    font-size: 100px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 50px;
+}
+.Sobre {
+    font-size: 30px;
+    text-align: center;
+    color: #778da9;
+    margin-bottom: 100px;
+}
+.Quem-Sou-Eu{
+    font-size: 30px;
+    text-align: center;
+    line-height: 1.8;
+    margin-bottom: 100px;
+}
+.Lista-Projetos {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 150px;
+    flex-wrap: wrap;
+}
+.Lista-Projetos a{
+    text-decoration: none;
+    color: #778da9;
+}
+
+.Lista-Projetos a:hover{
+    color: #006eff;
+    transition: color 0.3s;
+}
+
+.Lista-Projetos i{
+    margin: 0 10px;
+}
+.Projeto {
+    font-size: 20px;
+    background-color: #1b263b;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    width: 500px;
+    transition: transform 0.3s;
+}
+
+.Projeto a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #778da9;
+    text-decoration: none;
+    font-weight: bold;
+}
+.Projeto:hover {
+    transform: translateY(-8px) scale(1.05);
+}
+.contato {
+    text-align: center;
+    transition: transform 0.3s;
+}
+.contato i {
+    font-size: 50px;      
+    color: #e0e1dd;       
+    margin: 0 25px;
+}
+.contato i:hover {
+    color: #778da9;           
+    transition: color 0.3s;
+    transform: translateY(-8px);
+    transform: scale(1.05);
+}
+hr {
+    border: none;
+    height: 2px;
+    background-color:   #ffffff;
+    width: 80%;
+    margin: 40px auto;
+}
+h1 {
+    font-size: 70px;
+    text-align: center;
+    margin-bottom: 60px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #415a77;
+}
