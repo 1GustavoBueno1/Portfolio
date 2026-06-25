@@ -13,6 +13,27 @@ header {
     align-items: center;           /* centraliza na horizontal */
 }
 
+.Projeto {
+    font-size: 20px;
+    background-color: #1b263b;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    width: 500px;
+    transition: transform 0.3s;
+}
+.Animar {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s, transform 1s;
+}
+.Animar.Visivel {
+    opacity: 1;
+    transform: translateY(0);
+
+}
+
 .Nome {
     font-size: 100px;
     font-weight: bold;
@@ -50,16 +71,6 @@ header {
 
 .Lista-Projetos i{
     margin: 0 10px;
-}
-.Projeto {
-    font-size: 20px;
-    background-color: #1b263b;
-    color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-    width: 500px;
-    transition: transform 0.3s;
 }
 
 .Projeto a {
