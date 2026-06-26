@@ -1,64 +1,356 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portifolio</title>
-    <link rel="stylesheet" href="css.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gustavo Bueno — Desenvolvedor Python especializado em automação de processos, back-end e APIs. Projetos com FastAPI, Flask e Playwright." />
+  <meta name="author" content="Gustavo Bueno" />
+  <meta name="theme-color" content="#08080b" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Gustavo Bueno — Desenvolvedor Python & Back-end" />
+  <meta property="og:description" content="Automação de processos, APIs e back-end com Python. Veja meus projetos." />
+  <meta property="og:locale" content="pt_BR" />
+
+  <title>Gustavo Bueno — Desenvolvedor Python & Back-end</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css.css" />
 </head>
 <body>
-    <header>
-        <h1 class="Nome Animar">Gustavo Bueno</h1>
-        <h2 class="Sobre Animar">Desenvolvedor Python | automação de processos e back-end</h2>
-        <br>
+  <a class="skip-link" href="#main">Pular para o conteúdo</a>
 
-    </header>
-    <main>
-        <div class="Quem-Sou-Eu Animar">
-            <h1>Quem sou eu?</h1>
-            <p>Meu nome é Gustavo Bueno, desenvolvedor Python desde 2025, focado em automação de processos e back-end.
-            Aprendo cada dia mais criando projetos para resolver problemas reais, pesquisando, testando e escrevendo muito código.</p>
+  <!-- Fundo decorativo (aurora + grid) -->
+  <div class="bg-decor" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="bg-aurora bg-aurora--1"></div>
+    <div class="bg-aurora bg-aurora--2"></div>
+    <div class="bg-aurora bg-aurora--3"></div>
+  </div>
+
+  <!-- ===== Navbar ===== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#hero" class="nav__brand" aria-label="Início — Gustavo Bueno">
+        <span class="nav__logo" aria-hidden="true">GB</span>
+        <span class="nav__brand-text">Gustavo&nbsp;Bueno</span>
+      </a>
+
+      <nav class="nav__links" id="nav-links" aria-label="Navegação principal">
+        <a href="#sobre" class="nav__link">Sobre</a>
+        <a href="#skills" class="nav__link">Skills</a>
+        <a href="#projetos" class="nav__link">Projetos</a>
+        <a href="#contato" class="nav__link">Contato</a>
+        <a href="#contato" class="btn btn--sm btn--primary nav__cta">Fale comigo</a>
+      </nav>
+
+      <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+        <p class="hero__eyebrow reveal" data-reveal data-reveal-delay="0">
+          <span class="status-dot" aria-hidden="true"></span>
+          Disponível para novos projetos
+        </p>
+
+        <h1 class="hero__title reveal" data-reveal data-reveal-delay="1" id="hero-title">
+          Construo <span class="grad-text">automações</span> e
+          <span class="grad-text">back-ends</span> que resolvem problemas reais.
+        </h1>
+
+        <p class="hero__subtitle reveal" data-reveal data-reveal-delay="2">
+          Olá, sou <strong>Gustavo Bueno</strong> — desenvolvedor Python focado em
+          automação de processos, APIs e sistemas back-end seguros e escaláveis.
+        </p>
+
+        <div class="hero__actions reveal" data-reveal data-reveal-delay="3">
+          <a href="#projetos" class="btn btn--primary">
+            Ver projetos
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+          <a href="#contato" class="btn btn--ghost">Entrar em contato</a>
         </div>
-        <h1 class="Projetos-Titulo">Projetos</h1>
-        <div class="Lista-Projetos">
-            <div class="Projeto Animar">
-                <h2>AutoCelesc</h2>
-                <p>Robô de automação que baixa faturas de energia de dezenas de unidades
-                automaticamente, eliminando o trabalho manual de acessar o portal e baixar
-                documento por documento. Desenvolvido em Python com Playwright, o sistema faz
-                login, navega entre as unidades e lida com o carregamento dinâmico das páginas. Conta
-                com um mecanismo de retomada que salva o progresso e continua de onde parou caso a
-                conexão seja bloqueada, além de tratar casos de unidades sem fatura sem interromper a execução</p>
-                <a href="https://github.com/1GustavoBueno1/Automacao-para-contas-de-luz">Ver no github<i class="fa-brands fa-github"></i></a>
-                </div>
-            <div class="Projeto Animar">
-                <h2>Task-Flow Web</h2>
-                <p>Aplicação web de gerenciamento de tarefas com interface própria, construída em
-                Python com Flask. O projeto tem foco em segurança e boas práticas: senhas protegidas
-                com hashing, prevenção contra SQL injection, proteção CSRF e controle de sessão. A
-                arquitetura usa organização em módulos (Blueprints) para manter o código limpo e escalável</p>
-                <a href="https://taskflow-app-saas.up.railway.app/">Acessar o app</a>
-                </div>
-            <div class="Projeto Animar">
-                <h2>Task-Flow API</h2>
-                <p>API REST de gerenciamento de tarefas onde cada usuário acessa apenas os próprios
-                dados, com autenticação segura. Construída em Python com FastAPI, usa autenticação
-                JWT, validação de dados e controle de acesso por usuário em todos os endpoints. Inclui
-                uma suíte de testes automatizados com pytest e está publicada em produção.</p>
-                <a href="https://github.com/1GustavoBueno1/TaskFlow-FastAPI">Ver no github<i class="fa-brands fa-github"></i></a>
+
+        <ul class="hero__stats reveal" data-reveal data-reveal-delay="4">
+          <li><span class="hero__stat-num">3+</span><span class="hero__stat-label">Projetos em produção</span></li>
+          <li><span class="hero__stat-num">100%</span><span class="hero__stat-label">Python &amp; back-end</span></li>
+          <li><span class="hero__stat-num">REST</span><span class="hero__stat-label">APIs &amp; automação</span></li>
+        </ul>
+      </div>
+
+      <a href="#sobre" class="hero__scroll reveal" data-reveal aria-label="Rolar para a próxima seção">
+        <span class="hero__scroll-mouse"></span>
+      </a>
+    </section>
+
+    <!-- ===== Sobre ===== -->
+    <section class="section" id="sobre" aria-labelledby="sobre-title">
+      <div class="container section__grid">
+        <div class="reveal" data-reveal>
+          <p class="section__kicker">Quem sou eu</p>
+          <h2 class="section__title" id="sobre-title">
+            Resolvo problemas com código — limpo, testado e em produção.
+          </h2>
+        </div>
+        <div class="about__body reveal" data-reveal data-reveal-delay="1">
+          <p>
+            Sou <strong>Gustavo Bueno</strong>, desenvolvedor Python desde 2025, focado em
+            <strong>automação de processos</strong> e <strong>back-end</strong>. Aprendo construindo:
+            transformo tarefas repetitivas em sistemas confiáveis e ideias em APIs que funcionam no mundo real.
+          </p>
+          <p>
+            Pesquiso, testo e escrevo muito código todos os dias — sempre com atenção a
+            segurança, organização e boas práticas.
+          </p>
+
+          <ul class="about__highlights">
+            <li>
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" /></svg>
+              Automação de ponta a ponta com Playwright
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" /></svg>
+              APIs REST seguras com FastAPI &amp; Flask
+            </li>
+            <li>
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" /></svg>
+              Autenticação JWT, testes com pytest e deploy em produção
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Skills ===== -->
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section__head reveal" data-reveal>
+          <p class="section__kicker">Stack &amp; ferramentas</p>
+          <h2 class="section__title" id="skills-title">Tecnologias que utilizo</h2>
+        </div>
+
+        <div class="skills__grid">
+          <article class="skill-card reveal" data-reveal>
+            <div class="skill-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6" /></svg>
             </div>
+            <h3 class="skill-card__title">Linguagens &amp; Back-end</h3>
+            <ul class="tag-list">
+              <li class="tag">Python</li>
+              <li class="tag">FastAPI</li>
+              <li class="tag">Flask</li>
+              <li class="tag">REST APIs</li>
+            </ul>
+          </article>
+
+          <article class="skill-card reveal" data-reveal data-reveal-delay="1">
+            <div class="skill-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3 class="skill-card__title">Segurança &amp; Qualidade</h3>
+            <ul class="tag-list">
+              <li class="tag">JWT</li>
+              <li class="tag">Hashing</li>
+              <li class="tag">CSRF</li>
+              <li class="tag">pytest</li>
+            </ul>
+          </article>
+
+          <article class="skill-card reveal" data-reveal data-reveal-delay="2">
+            <div class="skill-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+            </div>
+            <h3 class="skill-card__title">Automação</h3>
+            <ul class="tag-list">
+              <li class="tag">Playwright</li>
+              <li class="tag">Web Scraping</li>
+              <li class="tag">Scripts</li>
+            </ul>
+          </article>
+
+          <article class="skill-card reveal" data-reveal data-reveal-delay="3">
+            <div class="skill-card__icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+            </div>
+            <h3 class="skill-card__title">Dados &amp; Infra</h3>
+            <ul class="tag-list">
+              <li class="tag">SQL</li>
+              <li class="tag">Git</li>
+              <li class="tag">Deploy / Railway</li>
+            </ul>
+          </article>
         </div>
-        <h1>Meios de contato</h1>
-        <hr>
-    </main>
-    <footer>
-        <div class="contato Animar">
-            <a href="https://github.com/1GustavoBueno1"><i class="fa-brands fa-github"></i></a>
-            <a href="mailto:gustavo.silva123913@gmail.com"><i class="fa-solid fa-envelope"></i></a>
-            <a href="https://www.linkedin.com/in/gustavo-silva-a351a33bb"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+    </section>
+
+    <!-- ===== Projetos ===== -->
+    <section class="section" id="projetos" aria-labelledby="projetos-title">
+      <div class="container">
+        <div class="section__head reveal" data-reveal>
+          <p class="section__kicker">Trabalhos selecionados</p>
+          <h2 class="section__title" id="projetos-title">Projetos</h2>
+          <p class="section__lead">
+            Soluções reais que coloquei em produção — da automação que economiza horas de trabalho manual
+            às APIs seguras testadas com pytest.
+          </p>
         </div>
-    </footer>
-    <script src="script.js"></script>
+
+        <div class="projects">
+          <!-- Projeto 1 -->
+          <article class="project reveal" data-reveal>
+            <div class="project__head">
+              <span class="project__index">01</span>
+              <ul class="project__tech">
+                <li class="tag tag--accent">Python</li>
+                <li class="tag tag--accent">Playwright</li>
+                <li class="tag tag--accent">Automação</li>
+              </ul>
+            </div>
+            <h3 class="project__title">AutoCelesc</h3>
+            <p class="project__desc">
+              Robô que baixa automaticamente as faturas de energia de dezenas de unidades,
+              eliminando o trabalho manual de acessar o portal documento por documento. Faz login,
+              navega entre as unidades e lida com o carregamento dinâmico das páginas. Conta com
+              <strong>mecanismo de retomada</strong> que salva o progresso e continua de onde parou caso a
+              conexão seja bloqueada, tratando unidades sem fatura sem interromper a execução.
+            </p>
+            <div class="project__links">
+              <a class="project__link" href="https://github.com/1GustavoBueno1/Automacao-para-contas-de-luz" target="_blank" rel="noopener noreferrer">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.82 0c2.22-1.49 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+                Ver no GitHub
+              </a>
+            </div>
+          </article>
+
+          <!-- Projeto 2 -->
+          <article class="project reveal" data-reveal data-reveal-delay="1">
+            <div class="project__head">
+              <span class="project__index">02</span>
+              <ul class="project__tech">
+                <li class="tag tag--accent">Flask</li>
+                <li class="tag tag--accent">Segurança</li>
+                <li class="tag tag--accent">Blueprints</li>
+              </ul>
+            </div>
+            <h3 class="project__title">Task-Flow Web</h3>
+            <p class="project__desc">
+              Aplicação web de gerenciamento de tarefas com interface própria, construída em Flask.
+              Foco em <strong>segurança e boas práticas</strong>: senhas protegidas com hashing,
+              prevenção contra SQL injection, proteção CSRF e controle de sessão. Arquitetura organizada
+              em módulos (Blueprints) para manter o código limpo e escalável.
+            </p>
+            <div class="project__links">
+              <a class="project__link project__link--primary" href="https://taskflow-app-saas.up.railway.app/" target="_blank" rel="noopener noreferrer">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                Acessar o app
+              </a>
+            </div>
+          </article>
+
+          <!-- Projeto 3 -->
+          <article class="project reveal" data-reveal data-reveal-delay="2">
+            <div class="project__head">
+              <span class="project__index">03</span>
+              <ul class="project__tech">
+                <li class="tag tag--accent">FastAPI</li>
+                <li class="tag tag--accent">JWT</li>
+                <li class="tag tag--accent">pytest</li>
+              </ul>
+            </div>
+            <h3 class="project__title">Task-Flow API</h3>
+            <p class="project__desc">
+              API REST de gerenciamento de tarefas onde cada usuário acessa apenas os próprios dados,
+              com <strong>autenticação JWT</strong>, validação de dados e controle de acesso por usuário
+              em todos os endpoints. Inclui suíte de testes automatizados com pytest e está publicada em produção.
+            </p>
+            <div class="project__links">
+              <a class="project__link" href="https://github.com/1GustavoBueno1/TaskFlow-FastAPI" target="_blank" rel="noopener noreferrer">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.82 0c2.22-1.49 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+                Ver no GitHub
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Contato ===== -->
+    <section class="section section--contact" id="contato" aria-labelledby="contato-title">
+      <div class="container contact">
+        <div class="contact__intro reveal" data-reveal>
+          <p class="section__kicker">Vamos conversar</p>
+          <h2 class="section__title" id="contato-title">
+            Tem um projeto ou vaga em mente?
+          </h2>
+          <p class="section__lead">
+            Estou aberto a oportunidades e parcerias. Me mande uma mensagem ou me encontre nas redes.
+          </p>
+
+          <ul class="contact__socials">
+            <li>
+              <a class="contact__social" href="https://github.com/1GustavoBueno1" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Gustavo Bueno">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.82 0c2.22-1.49 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+                <span>GitHub</span>
+              </a>
+            </li>
+            <li>
+              <a class="contact__social" href="https://www.linkedin.com/in/gustavo-silva-a351a33bb" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Gustavo Bueno">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+                <span>LinkedIn</span>
+              </a>
+            </li>
+            <li>
+              <a class="contact__social" href="mailto:gustavo.silva123913@gmail.com" aria-label="Enviar e-mail para Gustavo Bueno">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+                <span>E-mail</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <form class="contact__form reveal" data-reveal data-reveal-delay="1" id="contact-form" novalidate>
+          <div class="field">
+            <label for="name">Nome</label>
+            <input type="text" id="name" name="name" autocomplete="name" placeholder="Seu nome" required />
+          </div>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email" placeholder="voce@email.com" required />
+          </div>
+          <div class="field">
+            <label for="message">Mensagem</label>
+            <textarea id="message" name="message" rows="4" placeholder="Conte um pouco sobre a oportunidade ou projeto..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--block">
+            Enviar mensagem
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+          <p class="form__feedback" id="form-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__brand"><span class="nav__logo" aria-hidden="true">GB</span> Gustavo Bueno</p>
+      <p class="footer__note">Desenvolvido com Python no coração e atenção aos detalhes. &copy; <span id="year"></span></p>
+      <a href="#hero" class="footer__top" aria-label="Voltar ao topo">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
