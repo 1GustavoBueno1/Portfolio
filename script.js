@@ -31,7 +31,7 @@
     revealEls.forEach((el) => revealObserver.observe(el));
   }
 
-  /* ---------- Navbar: sombra ao rolar ---------- */
+  /* ---------- Navbar: fundo ao rolar ---------- */
   const nav = document.getElementById("nav");
   const onScroll = () => {
     nav.classList.toggle("is-scrolled", window.scrollY > 8);
@@ -75,17 +75,15 @@
     const spyObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          document
+            .querySelectorAll(".nav__link.is-active")
+            .forEach((l) => l.classList.remove("is-active"));
           const link = linkFor(entry.target.id);
-          if (!link) return;
-          if (entry.isIntersecting) {
-            document
-              .querySelectorAll(".nav__link.is-active")
-              .forEach((l) => l.classList.remove("is-active"));
-            link.classList.add("is-active");
-          }
+          if (link) link.classList.add("is-active");
         });
       },
-      { threshold: 0.1, rootMargin: "-45% 0px -50% 0px" }
+      { threshold: 0, rootMargin: "-45% 0px -50% 0px" }
     );
     sections.forEach((s) => spyObserver.observe(s));
   }
@@ -120,7 +118,10 @@
     });
   }
 
-  /* ---------- Ano no rodapé ---------- */
+  /* ---------- Anos (capa e rodapé) ---------- */
+  const year = new Date().getFullYear();
   const yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+  if (yearEl) yearEl.textContent = year;
+  const mastheadYear = document.getElementById("masthead-year");
+  if (mastheadYear) mastheadYear.textContent = year;
 })();
