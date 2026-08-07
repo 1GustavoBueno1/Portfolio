@@ -3,261 +3,294 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Gustavo Bueno, Desenvolvedor Python especializado em automação de processos, backend e APIs. Projetos com FastAPI, Flask e Playwright." />
+  <meta name="description" content="Portfólio de Gustavo Bueno, desenvolvedor Python focado em automação de processos, APIs e sistemas backend com FastAPI, Flask e Playwright." />
   <meta name="author" content="Gustavo Bueno" />
-  <meta name="theme-color" content="#0B1F18" />
+  <meta name="theme-color" content="#100b18" />
+  <meta name="color-scheme" content="dark" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Gustavo Bueno, Desenvolvedor Python & Backend" />
-  <meta property="og:description" content="Automação de processos, APIs e backend com Python. Veja meus projetos." />
+  <meta property="og:title" content="Gustavo Bueno — Desenvolvedor Python & Backend" />
+  <meta property="og:description" content="Automação de processos, APIs e backend com Python. Conheça os projetos de Gustavo Bueno." />
   <meta property="og:locale" content="pt_BR" />
 
-  <title>Gustavo Bueno, Desenvolvedor Python & Back-end</title>
+  <title>Gustavo Bueno — Python, Automação & Backend</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Instrument+Sans:wght@400;500;600&family=Fragment+Mono&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css.css" />
 </head>
 <body>
   <a class="skip-link" href="#main">Pular para o conteúdo</a>
 
-  <!-- ===== Navegação ===== -->
   <header class="nav" id="nav">
     <div class="nav__inner">
-      <a href="#hero" class="nav__brand" aria-label="Início — Gustavo Bueno">Gustavo&nbsp;Bueno</a>
+      <a class="nav__brand" href="#inicio" aria-label="Ir para o início">
+        <span class="nav__monogram" aria-hidden="true">GB</span>
+        <span class="nav__name">Gustavo Bueno</span>
+      </a>
 
       <nav class="nav__links" id="nav-links" aria-label="Navegação principal">
-        <a href="#sobre" class="nav__link"><span class="nav__num">01</span>Sobre</a>
-        <a href="#skills" class="nav__link"><span class="nav__num">02</span>Skills</a>
-        <a href="#projetos" class="nav__link"><span class="nav__num">03</span>Projetos</a>
-        <a href="#contato" class="nav__link"><span class="nav__num">04</span>Contato</a>
+        <a class="nav__link" href="#projetos">Projetos</a>
+        <a class="nav__link" href="#sobre">Sobre</a>
+        <a class="nav__link" href="#stack">Stack</a>
+        <a class="nav__link nav__link--contact" href="#contato">Vamos conversar <span aria-hidden="true">↗</span></a>
       </nav>
 
-      <button class="nav__toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+      <button class="nav__toggle" id="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
         <span></span><span></span>
       </button>
     </div>
   </header>
 
   <main id="main">
-    <!-- ===== Hero (capa) ===== -->
-    <section class="hero" id="hero" aria-labelledby="hero-title">
-      <div class="container">
-        <div class="hero__masthead reveal" data-reveal>
-          <span>Portfólio</span>
-          <span class="hero__masthead-mid">Python · Automação · Backend</span>
-          <span aria-hidden="true" id="masthead-year"></span>
-        </div>
-
-        <p class="hero__status reveal" data-reveal data-reveal-delay="1">
-          <span class="status-dot" aria-hidden="true"></span>
-          Disponível para novos projetos
-        </p>
-
-        <h1 class="hero__title reveal" data-reveal data-reveal-delay="2" id="hero-title">
-          Gustavo<br /><em>Bueno</em><span class="hero__period">.</span>
-        </h1>
-
-        <p class="hero__lead reveal" data-reveal data-reveal-delay="3">
-          Desenvolvedor Python focado em <strong>automação de processos</strong>,
-          <strong>APIs</strong> e sistemas backend seguros e escaláveis.
-          Construo automações e backends que resolvem problemas reais.
-        </p>
-
-        <div class="hero__actions reveal" data-reveal data-reveal-delay="4">
-          <a href="#projetos" class="link-arrow">Ver projetos <span aria-hidden="true">→</span></a>
-          <a href="#contato" class="link-arrow link-arrow--muted">Entrar em contato <span aria-hidden="true">→</span></a>
-        </div>
-
-        <ul class="hero__notes reveal" data-reveal data-reveal-delay="5">
-          <li><span class="hero__note-num">3+</span><span class="hero__note-label">Projetos em produção</span></li>
-          <li><span class="hero__note-num">100%</span><span class="hero__note-label">Python &amp; backend</span></li>
-          <li><span class="hero__note-num">REST</span><span class="hero__note-label">APIs &amp; automação</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ===== 01 · Sobre ===== -->
-    <section class="section" id="sobre" aria-labelledby="sobre-title">
-      <div class="container">
-        <div class="section__grid">
-          <div class="section__aside reveal" data-reveal>
-            <p class="section__kicker"><span class="section__num">01</span>Quem sou eu</p>
-            <h2 class="section__title" id="sobre-title">Resolvo problemas com código limpo, testado e em produção.</h2>
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <div class="eyebrow reveal" data-reveal>
+            <span class="eyebrow__line" aria-hidden="true"></span>
+            Python · Automação · Backend
           </div>
 
-          <div class="section__body reveal" data-reveal data-reveal-delay="1">
-            <p>
-              Sou <strong>Gustavo Bueno</strong>, desenvolvedor Python desde 2025, focado em
-              <strong>automação de processos</strong> e <strong>backend</strong>. Aprendo construindo,
-              transformo tarefas repetitivas em sistemas confiáveis e ideias em APIs que funcionam no mundo real.
-            </p>
-            <p>
-              Pesquiso, testo e escrevo muito código todos os dias, sempre com atenção a
-              segurança, organização e boas práticas.
-            </p>
-
-            <ul class="about__highlights">
-              <li>Automação de ponta a ponta com Playwright</li>
-              <li>APIs REST seguras com FastAPI &amp; Flask</li>
-              <li>Autenticação JWT, testes com pytest e deploy em produção</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 02 · Skills ===== -->
-    <section class="section" id="skills" aria-labelledby="skills-title">
-      <div class="container">
-        <div class="section__head reveal" data-reveal>
-          <p class="section__kicker"><span class="section__num">02</span>Stack &amp; ferramentas</p>
-          <h2 class="section__title" id="skills-title">Tecnologias que utilizo</h2>
-        </div>
-
-        <ul class="skills">
-          <li class="skills__row reveal" data-reveal>
-            <h3 class="skills__name">Linguagens &amp; Backend</h3>
-            <p class="skills__tags">Python · FastAPI · Flask · REST APIs</p>
-          </li>
-          <li class="skills__row reveal" data-reveal data-reveal-delay="1">
-            <h3 class="skills__name">Segurança &amp; Qualidade</h3>
-            <p class="skills__tags">JWT · Hashing · CSRF · pytest</p>
-          </li>
-          <li class="skills__row reveal" data-reveal data-reveal-delay="2">
-            <h3 class="skills__name">Automação</h3>
-            <p class="skills__tags">Playwright · Web Scraping · Scripts</p>
-          </li>
-          <li class="skills__row reveal" data-reveal data-reveal-delay="3">
-            <h3 class="skills__name">Dados &amp; Infra</h3>
-            <p class="skills__tags">SQL · Git · Deploy / Railway</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ===== 03 · Projetos ===== -->
-    <section class="section" id="projetos" aria-labelledby="projetos-title">
-      <div class="container">
-        <div class="section__head reveal" data-reveal>
-          <p class="section__kicker"><span class="section__num">03</span>Trabalhos selecionados</p>
-          <h2 class="section__title" id="projetos-title">Projetos</h2>
-          <p class="section__lead">
-            Soluções reais que coloquei em produção, da automação que economiza horas de trabalho manual
-            às APIs seguras testadas com pytest.
+          <p class="hero__name reveal" data-reveal data-delay="1">Olá, eu sou Gustavo Bueno.</p>
+          <h1 class="hero__title reveal" id="hero-title" data-reveal data-delay="2">
+            Sistemas que fazem o trabalho <em>acontecer.</em>
+          </h1>
+          <p class="hero__lead reveal" data-reveal data-delay="3">
+            Desenvolvedor Python focado em automação de processos, APIs e sistemas backend seguros e escaláveis. Construo soluções que resolvem problemas reais.
           </p>
+
+          <div class="hero__actions reveal" data-reveal data-delay="4">
+            <a class="button button--primary" href="#projetos">Explorar projetos <span aria-hidden="true">↓</span></a>
+            <a class="text-link" href="#contato">Entrar em contato <span aria-hidden="true">↗</span></a>
+          </div>
+
+          <div class="availability reveal" data-reveal data-delay="5">
+            <span class="availability__dot" aria-hidden="true"></span>
+            <span>Disponível para novos projetos</span>
+          </div>
         </div>
+
+        <div class="hero__visual reveal" data-reveal data-delay="2" aria-hidden="true">
+          <div class="hero__frame">
+            <img src="assets/automation-flow.jpg" alt="" width="1536" height="1024" fetchpriority="high" />
+            <div class="hero__frame-grid"></div>
+          </div>
+          <span class="hero__orbit hero__orbit--one"></span>
+          <span class="hero__orbit hero__orbit--two"></span>
+          <p class="hero__visual-label"><span>01</span> Processos → sistemas</p>
+        </div>
+      </div>
+
+      <div class="container hero__proof reveal" data-reveal data-delay="5" aria-label="Áreas de atuação">
+        <div class="hero__proof-intro">Em foco</div>
+        <div class="hero__proof-item"><span>01</span> Automação ponta a ponta</div>
+        <div class="hero__proof-item"><span>02</span> APIs REST seguras</div>
+        <div class="hero__proof-item"><span>03</span> Código testado</div>
+      </div>
+    </section>
+
+    <section class="section projects-section" id="projetos" aria-labelledby="projects-title">
+      <div class="container">
+        <header class="section__header section__header--split reveal" data-reveal>
+          <div>
+            <p class="section__index">01 / Projetos selecionados</p>
+            <h2 class="section__title" id="projects-title">Trabalho real,<br /><span>impacto direto.</span></h2>
+          </div>
+          <p class="section__intro">
+            Soluções colocadas em produção: da automação que reduz trabalho manual às APIs seguras testadas com pytest.
+          </p>
+        </header>
 
         <div class="projects">
-          <!-- Projeto 1 -->
           <article class="project reveal" data-reveal>
-            <div class="project__meta">
-              <span class="project__index">01</span>
+            <div class="project__rail">
+              <span class="project__number">01</span>
+              <span class="project__status"><i aria-hidden="true"></i> Automação</span>
+            </div>
+            <div class="project__main">
               <p class="project__tech">Python · Playwright · Automação</p>
-            </div>
-            <div class="project__content">
               <h3 class="project__title">AutoCelesc</h3>
-              <p class="project__desc">
-                Robô que baixa automaticamente as faturas de energia de dezenas de unidades,
-                eliminando o trabalho manual de acessar o portal documento por documento. Faz login,
-                navega entre as unidades e lida com o carregamento dinâmico das páginas. Conta com
-                <strong>mecanismo de retomada</strong> que salva o progresso e continua de onde parou caso a
-                conexão seja bloqueada, tratando unidades sem fatura sem interromper a execução.
+              <p class="project__description">
+                Robô que baixa automaticamente as faturas de energia de dezenas de unidades, eliminando o trabalho manual de acessar o portal documento por documento. Faz login, navega entre as unidades e lida com o carregamento dinâmico das páginas.
               </p>
-              <p class="project__links">
-                <a class="link-arrow" href="https://github.com/1GustavoBueno1/Automacao-para-contas-de-luz" target="_blank" rel="noopener noreferrer">Ver no GitHub <span aria-hidden="true">↗</span></a>
-              </p>
+              <div class="project__detail">
+                <span class="project__detail-label">Destaque técnico</span>
+                <p>Mecanismo de retomada que salva o progresso e continua de onde parou caso a conexão seja bloqueada, tratando unidades sem fatura sem interromper a execução.</p>
+              </div>
+            </div>
+            <div class="project__action">
+              <a class="round-link" href="https://github.com/1GustavoBueno1/Automacao-para-contas-de-luz" target="_blank" rel="noopener noreferrer" aria-label="Ver AutoCelesc no GitHub">
+                <span aria-hidden="true">↗</span>
+              </a>
+              <span>Ver no GitHub</span>
             </div>
           </article>
 
-          <!-- Projeto 2 -->
           <article class="project reveal" data-reveal>
-            <div class="project__meta">
-              <span class="project__index">02</span>
+            <div class="project__rail">
+              <span class="project__number">02</span>
+              <span class="project__status"><i aria-hidden="true"></i> Web app</span>
+            </div>
+            <div class="project__main">
               <p class="project__tech">Flask · Segurança · Blueprints</p>
-            </div>
-            <div class="project__content">
               <h3 class="project__title">Task-Flow Web</h3>
-              <p class="project__desc">
-                Aplicação web de gerenciamento de tarefas com interface própria, construída em Flask.
-                Foco em <strong>segurança e boas práticas</strong>: senhas protegidas com hashing,
-                prevenção contra SQL injection, proteção CSRF e controle de sessão. Arquitetura organizada
-                em módulos (Blueprints) para manter o código limpo e escalável.
+              <p class="project__description">
+                Aplicação web de gerenciamento de tarefas com interface própria, construída em Flask. O foco está em segurança e boas práticas: senhas protegidas com hashing, prevenção contra SQL injection, proteção CSRF e controle de sessão.
               </p>
-              <p class="project__links">
-                <a class="link-arrow" href="https://taskflow-app-saas.up.railway.app/" target="_blank" rel="noopener noreferrer">Acessar o app <span aria-hidden="true">↗</span></a>
-              </p>
+              <div class="project__detail">
+                <span class="project__detail-label">Arquitetura</span>
+                <p>Organizada em módulos com Blueprints para manter o código limpo e escalável.</p>
+              </div>
+            </div>
+            <div class="project__action">
+              <a class="round-link" href="https://taskflow-app-saas.up.railway.app/" target="_blank" rel="noopener noreferrer" aria-label="Acessar Task-Flow Web">
+                <span aria-hidden="true">↗</span>
+              </a>
+              <span>Acessar o app</span>
             </div>
           </article>
 
-          <!-- Projeto 3 -->
           <article class="project reveal" data-reveal>
-            <div class="project__meta">
-              <span class="project__index">03</span>
-              <p class="project__tech">FastAPI · JWT · pytest</p>
+            <div class="project__rail">
+              <span class="project__number">03</span>
+              <span class="project__status"><i aria-hidden="true"></i> API REST</span>
             </div>
-            <div class="project__content">
+            <div class="project__main">
+              <p class="project__tech">FastAPI · JWT · pytest</p>
               <h3 class="project__title">Task-Flow API</h3>
-              <p class="project__desc">
-                API REST de gerenciamento de tarefas onde cada usuário acessa apenas os próprios dados,
-                com <strong>autenticação JWT</strong>, validação de dados e controle de acesso por usuário
-                em todos os endpoints. Inclui suíte de testes automatizados com pytest e está publicada em produção.
+              <p class="project__description">
+                API REST de gerenciamento de tarefas onde cada usuário acessa apenas os próprios dados, com autenticação JWT, validação de dados e controle de acesso por usuário em todos os endpoints.
               </p>
-              <p class="project__links">
-                <a class="link-arrow" href="https://github.com/1GustavoBueno1/TaskFlow-FastAPI" target="_blank" rel="noopener noreferrer">Ver no GitHub <span aria-hidden="true">↗</span></a>
-              </p>
+              <div class="project__detail">
+                <span class="project__detail-label">Qualidade</span>
+                <p>Inclui suíte de testes automatizados com pytest e está publicada em produção.</p>
+              </div>
+            </div>
+            <div class="project__action">
+              <a class="round-link" href="https://github.com/1GustavoBueno1/TaskFlow-FastAPI" target="_blank" rel="noopener noreferrer" aria-label="Ver Task-Flow API no GitHub">
+                <span aria-hidden="true">↗</span>
+              </a>
+              <span>Ver no GitHub</span>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ===== 04 · Contato ===== -->
-    <section class="section section--contact" id="contato" aria-labelledby="contato-title">
-      <div class="container">
-        <div class="section__grid">
-          <div class="contact__intro reveal" data-reveal>
-            <p class="section__kicker"><span class="section__num">04</span>Vamos conversar</p>
-            <h2 class="section__title" id="contato-title">Tem um projeto ou vaga em mente?</h2>
-            <p class="section__lead">
-              Estou aberto a oportunidades e parcerias. Me mande uma mensagem ou me encontre nas redes.
-            </p>
-
-            <ul class="contact__socials">
-              <li><a class="link-arrow" href="https://github.com/1GustavoBueno1" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Gustavo Bueno">GitHub <span aria-hidden="true">↗</span></a></li>
-              <li><a class="link-arrow" href="https://www.linkedin.com/in/gustavo-silva-a351a33bb" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Gustavo Bueno">LinkedIn <span aria-hidden="true">↗</span></a></li>
-              <li><a class="link-arrow" href="https://mail.google.com/mail/?view=cm&fs=1&to=gustavo.silva123913@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Enviar e-mail para Gustavo Bueno">E-mail <span aria-hidden="true">↗</span></a></li>
-            </ul>
+    <section class="section about" id="sobre" aria-labelledby="about-title">
+      <div class="container about__grid">
+        <div class="about__heading reveal" data-reveal>
+          <p class="section__index">02 / Sobre</p>
+          <h2 class="section__title" id="about-title">Construir.<br />Testar.<br /><span>Colocar no ar.</span></h2>
+          <div class="about__since">
+            <span>Desenvolvedor Python</span>
+            <strong>desde 2025</strong>
           </div>
-
-          <form class="contact__form reveal" data-reveal data-reveal-delay="1" id="contact-form" novalidate>
-            <div class="field">
-              <label for="name">Nome</label>
-              <input type="text" id="name" name="name" autocomplete="name" placeholder="Seu nome" required />
-            </div>
-            <div class="field">
-              <label for="email">E-mail</label>
-              <input type="email" id="email" name="email" autocomplete="email" placeholder="voce@email.com" required />
-            </div>
-            <div class="field">
-              <label for="message">Mensagem</label>
-              <textarea id="message" name="message" rows="4" placeholder="Conte um pouco sobre a oportunidade ou projeto..." required></textarea>
-            </div>
-            <button type="submit" class="btn-submit">Enviar mensagem <span aria-hidden="true">→</span></button>
-            <p class="form__feedback" id="form-feedback" role="status" aria-live="polite"></p>
-          </form>
         </div>
+
+        <div class="about__content reveal" data-reveal data-delay="1">
+          <p class="about__lead">
+            Sou <strong>Gustavo Bueno</strong>, desenvolvedor Python focado em automação de processos e backend.
+          </p>
+          <p>
+            Aprendo construindo, transformo tarefas repetitivas em sistemas confiáveis e ideias em APIs que funcionam no mundo real. Pesquiso, testo e escrevo muito código todos os dias, sempre com atenção a segurança, organização e boas práticas.
+          </p>
+
+          <div class="principles" aria-label="Principais competências">
+            <div class="principle">
+              <span class="principle__number">01</span>
+              <div><h3>Automação completa</h3><p>Fluxos de ponta a ponta com Playwright.</p></div>
+            </div>
+            <div class="principle">
+              <span class="principle__number">02</span>
+              <div><h3>Backends seguros</h3><p>APIs REST com FastAPI e Flask.</p></div>
+            </div>
+            <div class="principle">
+              <span class="principle__number">03</span>
+              <div><h3>Qualidade aplicada</h3><p>JWT, testes com pytest e deploy em produção.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section stack" id="stack" aria-labelledby="stack-title">
+      <div class="container">
+        <header class="section__header reveal" data-reveal>
+          <p class="section__index">03 / Stack & ferramentas</p>
+          <h2 class="section__title" id="stack-title">Tecnologia com<br /><span>propósito.</span></h2>
+        </header>
+
+        <div class="stack__grid">
+          <article class="stack-card reveal" data-reveal>
+            <span class="stack-card__index">01</span>
+            <h3>Linguagens & Backend</h3>
+            <ul><li>Python</li><li>FastAPI</li><li>Flask</li><li>REST APIs</li></ul>
+          </article>
+          <article class="stack-card reveal" data-reveal data-delay="1">
+            <span class="stack-card__index">02</span>
+            <h3>Segurança & Qualidade</h3>
+            <ul><li>JWT</li><li>Hashing</li><li>CSRF</li><li>pytest</li></ul>
+          </article>
+          <article class="stack-card reveal" data-reveal data-delay="2">
+            <span class="stack-card__index">03</span>
+            <h3>Automação</h3>
+            <ul><li>Playwright</li><li>Web Scraping</li><li>Scripts</li></ul>
+          </article>
+          <article class="stack-card reveal" data-reveal data-delay="3">
+            <span class="stack-card__index">04</span>
+            <h3>Dados & Infra</h3>
+            <ul><li>SQL</li><li>Git</li><li>Deploy / Railway</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contato" aria-labelledby="contact-title">
+      <div class="contact__halo" aria-hidden="true"></div>
+      <div class="container contact__grid">
+        <div class="contact__copy reveal" data-reveal>
+          <p class="section__index">04 / Contato</p>
+          <h2 id="contact-title">Tem um projeto<br />ou vaga <span>em mente?</span></h2>
+          <p>Estou aberto a oportunidades e parcerias. Me mande uma mensagem ou me encontre nas redes.</p>
+
+          <div class="contact__links">
+            <a href="https://github.com/1GustavoBueno1" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            <a href="https://www.linkedin.com/in/gustavo-silva-a351a33bb" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=gustavo.silva123913@gmail.com" target="_blank" rel="noopener noreferrer">E-mail <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+
+        <form class="contact__form reveal" id="contact-form" data-reveal data-delay="1" novalidate>
+          <div class="form__row">
+            <label for="name">Seu nome</label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="Como posso te chamar?" required />
+          </div>
+          <div class="form__row">
+            <label for="email">Seu e-mail</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required />
+          </div>
+          <div class="form__row">
+            <label for="message">Sua mensagem</label>
+            <textarea id="message" name="message" rows="4" placeholder="Conte um pouco sobre a oportunidade ou projeto..." required></textarea>
+          </div>
+          <button class="button button--primary form__submit" type="submit">Enviar mensagem <span aria-hidden="true">↗</span></button>
+          <p class="form__feedback" id="form-feedback" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="container footer__inner">
-      <p class="footer__note">Desenvolvido com Python no coração e atenção aos detalhes. &copy; <span id="year"></span></p>
-      <a href="#hero" class="footer__top link-arrow link-arrow--muted">Voltar ao topo <span aria-hidden="true">↑</span></a>
+      <a class="nav__brand" href="#inicio" aria-label="Voltar ao início">
+        <span class="nav__monogram" aria-hidden="true">GB</span>
+        <span class="nav__name">Gustavo Bueno</span>
+      </a>
+      <p>Python no coração. Atenção aos detalhes. © <span id="year"></span></p>
+      <a class="footer__top" href="#inicio">Voltar ao topo <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
 
