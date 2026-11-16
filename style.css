@@ -981,11 +981,9 @@ figcaption {
 
 .sobre__azulejo {
   display: grid;
-  align-content: space-between;
-  gap: 2rem;
+  gap: 1rem;
   min-width: 0;
-  min-height: 14rem;
-  padding: clamp(1.25rem, 2vw, 1.75rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
   border-radius: var(--raio);
   background: var(--roxo);
   color: var(--branco);
@@ -994,13 +992,15 @@ figcaption {
 .sobre__commit {
   color: var(--branco);
   font-family: var(--fonte-titulo);
-  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  font-size: clamp(2.25rem, 1.4rem + 3.4vw, 4.5rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .sobre__commit-nota {
+  max-width: 34ch;
   color: var(--lilas);
   font-size: var(--t-pequeno);
 }
@@ -1008,8 +1008,12 @@ figcaption {
 .sobre__fatos {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1.25rem var(--calha);
+  gap: 1.5rem var(--calha);
   font-size: var(--t-pequeno);
+}
+
+.sobre__fatos dd {
+  margin: 0.375rem 0 0;
 }
 
 .sobre__cursos {
@@ -1321,14 +1325,19 @@ figcaption {
     color: var(--texto-suave);
   }
 
-  /* Tablet: mapa em cima, ocupando a largura; commit e fatos lado a lado. */
-  .sobre__mosaico {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Tablet: faixa do commit, mapa e fatos em três colunas, um abaixo do outro. */
+  .sobre__azulejo {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: 2rem;
   }
 
-  .sobre__mapa {
-    grid-column: 1 / -1;
-    grid-row: 1;
+  .sobre__fatos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sobre__mapa img {
+    aspect-ratio: 16 / 10;
   }
 }
 
@@ -1413,26 +1422,25 @@ figcaption {
     grid-column: 7 / span 6;
   }
 
-  /* Desktop: commit à esquerda, mapa no centro, fatos à direita. */
+  /* Desktop: faixa do commit em cima; mapa à esquerda e fatos à direita. */
   .sobre__mosaico {
     grid-template-columns: repeat(12, minmax(0, 1fr));
+    row-gap: var(--calha);
     align-items: start;
   }
 
   .sobre__azulejo {
-    grid-column: 1 / span 3;
-    grid-row: 1;
-    align-self: stretch;
+    grid-column: 1 / -1;
   }
 
   .sobre__mapa {
-    grid-column: 4 / span 6;
-    grid-row: 1;
+    grid-column: 1 / span 7;
   }
 
   .sobre__fatos {
-    grid-column: 10 / span 3;
-    grid-row: 1;
+    grid-column: 9 / span 4;
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 0.5rem;
   }
 
   .outros-bloco {
