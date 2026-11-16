@@ -10,9 +10,9 @@ Feito com HTML, CSS e JavaScript puros, sem framework e sem etapa de build.
 | Arquivo | Para que serve |
 |---|---|
 | `index.html` | Todo o conteúdo da página |
-| `style.css` | Visual: fundo roxo-escuro, texto claro, dourado na ação principal, mobile primeiro |
+| `style.css` | Visual: fundo branco, roxo nos títulos e faixas, dourado nos detalhes, mobile primeiro |
 | `script.js` | Ano do rodapé, prévia do índice de projetos e entrada suave dos blocos. A página funciona sem ele |
-| `assets/retrato-gustavo.webp` | Retrato da abertura, tratado em tons de roxo |
+| `assets/retrato-gustavo.webp` | Retrato antigo (não aparece mais na página) |
 | `assets/tela-*.webp` | Telas reais dos sistemas, capturadas rodando localmente com dados de exemplo |
 | `assets/mapa-lebon-regis.webp` | Mapa de Santa Catarina com Lebon Régis em destaque (CC BY 2.5, crédito no rodapé) |
 | `assets/credits.json` | Origem e licença das imagens de terceiros |
@@ -21,7 +21,7 @@ Feito com HTML, CSS e JavaScript puros, sem framework e sem etapa de build.
 | `tests/verificar.mjs` | Verificador automático (não faz parte do site) |
 | `docs/` | Especificação e plano do site |
 
-A fonte é a Hanken Grotesk, carregada do Google Fonts.
+As fontes são Bricolage Grotesque (títulos) e Figtree (texto), carregadas do Google Fonts.
 
 ## Ver o site no computador
 

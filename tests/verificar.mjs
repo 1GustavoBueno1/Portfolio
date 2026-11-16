@@ -112,7 +112,7 @@ teste("conteudo", "Open Graph, theme-color e favicon", () =>
       exigir(v, `falta meta ${prop}`);
     }
     exigir((await p.getAttribute('meta[property="og:locale"]', "content")) === "pt_BR", "og:locale deve ser pt_BR");
-    exigir((await p.getAttribute('meta[name="theme-color"]', "content")) === "#100b18", "theme-color deve ser #100b18");
+    exigir((await p.getAttribute('meta[name="theme-color"]', "content")) === "#ffffff", "theme-color deve ser #ffffff");
     exigir((await p.getAttribute('link[rel="icon"]', "href")) === "assets/favicon.svg", "favicon deve apontar para assets/favicon.svg");
   })
 );
@@ -264,19 +264,16 @@ teste("conteudo", "imagens com alt, marcos e seções rotuladas", () =>
   })
 );
 
-teste("conteudo", "listas de tecnologias separadas", () =>
+teste("conteudo", "lista de tecnologias", () =>
   comPagina({}, async (p) => {
     const stack = await p.locator("#stack").innerText();
-    exigir(/uso no dia a dia/i.test(stack), 'falta o grupo "Uso no dia a dia"');
-    exigir(/estou aprendendo/i.test(stack), 'falta o grupo "Estou aprendendo"');
+    exigir(!/estou aprendendo/i.test(stack), 'o grupo "Estou aprendendo" saiu da página');
     const nomes = (sel) => p.$$eval(sel, (ts) => ts.map((t) => t.textContent.trim()));
     const diaADia = await nomes('#tec-dia th[scope="row"]');
-    const aprendendo = await nomes('#tec-aprendendo th[scope="row"]');
     for (const t of ["PostgreSQL", "Docker", "Alembic", "Node.js", "TypeScript", "Firebase", "GitHub Actions"]) {
-      exigir(diaADia.includes(t), `"${t}" deve estar em Uso no dia a dia`);
+      exigir(diaADia.includes(t), `"${t}" deve estar na lista de tecnologias`);
     }
-    exigir(aprendendo.includes("React"), "React deve estar em Estou aprendendo");
-    exigir(!diaADia.includes("React"), "React não pode estar em Uso no dia a dia");
+    exigir(!diaADia.includes("React"), "React não entra na lista de tecnologias");
     exigir(!diaADia.includes("SQL"), 'não listar só "SQL"');
   })
 );
@@ -338,27 +335,27 @@ teste("visual", "contraste AA dos tokens de cor", () =>
       const estilo = getComputedStyle(document.documentElement);
       const ler = (n) => estilo.getPropertyValue(n).trim();
       return Object.fromEntries(
-        ["--fundo", "--superficie", "--texto", "--texto-suave", "--apagado", "--acento", "--sobre-acento",
-         "--violeta", "--violeta-escuro", "--creme", "--tinta", "--codigo-fundo"].map((n) => [n, ler(n)])
+        ["--fundo", "--superficie", "--texto", "--texto-suave", "--apagado", "--roxo", "--roxo-escuro",
+         "--lilas", "--ouro", "--ouro-texto", "--branco", "--codigo-fundo"].map((n) => [n, ler(n)])
       );
     });
-    exigir(t["--fundo"].toLowerCase() === "#100b18", `--fundo deve ser #100b18, é "${t["--fundo"]}"`);
+    exigir(t["--fundo"].toLowerCase() === "#ffffff", `--fundo deve ser #ffffff, é "${t["--fundo"]}"`);
+    // [fundo, texto, mínimo]. Texto grande (nomes do índice) pede 3:1.
     const pares = [
-      ["--fundo", "--texto"], ["--fundo", "--texto-suave"], ["--fundo", "--acento"],
-      ["--superficie", "--texto"], ["--superficie", "--texto-suave"], ["--superficie", "--acento"],
-      ["--acento", "--sobre-acento"],
-      ["--fundo", "--apagado"],            // nomes inativos do índice
-      ["--codigo-fundo", "--texto"],       // blocos de código
-      ["--acento", "--tinta"],             // campo dourado da chave "quem pede"
-      ["--violeta", "--creme"],            // campo violeta e azulejo do commit
-      ["--creme", "--tinta"],              // seção de contato e trilho da chave
-      ["--creme", "--violeta"],            // links do contato ao passar o mouse
-      ["--violeta-escuro", "--creme"],     // rodapé
-      ["--violeta-escuro", "--texto-suave"],
+      ["--fundo", "--texto", 4.5], ["--fundo", "--texto-suave", 4.5], ["--fundo", "--roxo", 4.5],
+      ["--fundo", "--ouro-texto", 4.5],      // subtítulo e rótulos dourados
+      ["--superficie", "--texto", 4.5], ["--superficie", "--texto-suave", 4.5], ["--superficie", "--roxo", 4.5],
+      ["--superficie", "--ouro-texto", 4.5], // rótulo da chave "quem faz o pedido"
+      ["--fundo", "--apagado", 3],           // nomes inativos do índice (texto grande)
+      ["--roxo", "--branco", 4.5],           // botão, chave ativa, contato, azulejo
+      ["--roxo", "--lilas", 4.5], ["--roxo", "--ouro", 4.5],
+      ["--codigo-fundo", "--branco", 4.5], ["--codigo-fundo", "--lilas", 4.5], ["--codigo-fundo", "--ouro", 4.5],
+      ["--roxo-escuro", "--branco", 4.5], ["--roxo-escuro", "--lilas", 4.5], ["--roxo-escuro", "--ouro", 4.5],
+      ["--ouro", "--roxo-escuro", 4.5],      // selo PUT e seleção de texto
     ];
-    for (const [fundo, texto] of pares) {
+    for (const [fundo, texto, minimo] of pares) {
       const razao = contraste(t[fundo], t[texto]);
-      exigir(razao >= 4.5, `contraste ${texto} sobre ${fundo} = ${razao.toFixed(2)} (mínimo 4,5)`);
+      exigir(razao >= minimo, `contraste ${texto} sobre ${fundo} = ${razao.toFixed(2)} (mínimo ${minimo})`);
     }
   })
 );
@@ -496,10 +493,12 @@ teste("visual", "fonte dobrada em 640 px não corta nem estoura texto", () =>
   })
 );
 
-teste("visual", "fonte Hanken Grotesk no corpo, com reserva do sistema", () =>
+teste("visual", "Figtree no corpo e Bricolage Grotesque nos títulos, com reserva do sistema", () =>
   comPagina({}, async (p) => {
     const familia = await p.evaluate(() => getComputedStyle(document.body).fontFamily);
-    exigir(/^"?Hanken Grotesk"?/.test(familia), `font-family do body começa com ${familia.split(",")[0]}`);
+    exigir(/^"?Figtree"?/.test(familia), `font-family do body começa com ${familia.split(",")[0]}`);
+    const titulo = await p.evaluate(() => getComputedStyle(document.querySelector("h1")).fontFamily);
+    exigir(/^"?Bricolage Grotesque"?/.test(titulo), `font-family do h1 começa com ${titulo.split(",")[0]}`);
     exigir(/system-ui|sans-serif/.test(familia), "falta fonte reserva do sistema");
   })
 );
@@ -562,19 +561,22 @@ for (const js of [true, false]) {
     comPagina({ largura: 1280, js }, async (p) => {
       const estado = () =>
         p.evaluate(() => ({
-          titulo: document.querySelector(".pergunta__titulo").innerText.replace(/\s+/g, " ").trim(),
+          status: document.querySelector(".terminal__status").innerText.replace(/\s+/g, " ").trim(),
+          explica: [...document.querySelectorAll(".pergunta__explica")].filter((e) => e.offsetParent).length,
+          cor: getComputedStyle(document.querySelector(".terminal__status")).color,
           resposta: [...document.querySelectorAll(".pergunta__resposta")].filter((e) => e.offsetParent).map((e) => e.innerText.split("\n")[0]),
-          fundo: getComputedStyle(document.querySelector(".pergunta__campo")).backgroundColor,
         }));
       const antes = await estado();
-      exigir(antes.titulo === "A API responde 200", `título inicial: "${antes.titulo}"`);
+      exigir(antes.status === "200 OK", `status inicial: "${antes.status}"`);
+      exigir(antes.explica === 1, `deveria haver 1 explicação visível, há ${antes.explica}`);
       exigir(antes.resposta.length === 1 && antes.resposta[0] === "HTTP 200", `resposta inicial: [${antes.resposta}]`);
       await p.click('label[for="quem-outro"]');
-      await p.waitForTimeout(400); // a cor do campo muda com transição de 0,25 s
+      await p.waitForTimeout(400); // a cor do status muda com transição de 0,2 s
       const depois = await estado();
-      exigir(depois.titulo === "A API responde 404", `depois de trocar: "${depois.titulo}"`);
+      exigir(depois.status === "404 Não encontrada", `depois de trocar: "${depois.status}"`);
+      exigir(depois.explica === 1, `deveria haver 1 explicação visível, há ${depois.explica}`);
       exigir(depois.resposta.length === 1 && depois.resposta[0] === "HTTP 404", `resposta depois: [${depois.resposta}]`);
-      exigir(depois.fundo !== antes.fundo, "o campo deveria trocar de cor");
+      exigir(depois.cor !== antes.cor, "o status deveria trocar de cor");
     })
   );
 }

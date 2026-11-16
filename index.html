@@ -6,8 +6,8 @@
   <title>Gustavo Bueno | Desenvolvedor backend júnior (Python, Node.js)</title>
   <meta name="description" content="Portfólio de Gustavo Bueno, desenvolvedor backend júnior: APIs com Python (FastAPI) e Node.js/TypeScript, PostgreSQL, Docker e testes automatizados." />
   <meta name="author" content="Gustavo Bueno da Silva" />
-  <meta name="theme-color" content="#100b18" />
-  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="color-scheme" content="light" />
   <link rel="canonical" href="https://1gustavobueno1.github.io/Portfolio/" />
 
   <meta property="og:type" content="website" />
@@ -24,7 +24,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=Figtree:wght@400;500;600&display=swap" />
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
@@ -35,6 +35,7 @@
     <nav class="menu" id="menu" aria-label="Navegação principal">
       <ul>
         <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#stack">Tecnologias</a></li>
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#contato">Contato</a></li>
       </ul>
@@ -44,20 +45,25 @@
   <main id="conteudo">
     <!-- ============================================================ abertura -->
     <section class="abertura" id="inicio" aria-labelledby="titulo-inicio">
-      <img class="abertura__retrato" src="assets/retrato-gustavo.webp" width="1100" height="1375" fetchpriority="high"
-           alt="Retrato de Gustavo Bueno, em tons de roxo, olhando para a câmera" />
       <h1 class="abertura__nome" id="titulo-inicio">
         <span class="linha linha--1"><span>Gustavo</span></span>
         <span class="linha linha--2"><span>Bueno</span></span>
       </h1>
+      <p class="abertura__cargo"><span class="abertura__parte">Desenvolvedor backend júnior</span> <span class="abertura__sep" aria-hidden="true">·</span> <span class="abertura__parte">Python e Node.js</span></p>
       <div class="abertura__meio">
         <p class="abertura__texto">
-          Desenvolvedor backend júnior. Construo APIs com Python (FastAPI) e Node.js com TypeScript, usando PostgreSQL, Docker e testes automatizados. Programo desde o fim de 2024. Buscando vaga júnior backend remota.
+          Construo APIs com Python (FastAPI) e Node.js com TypeScript, usando PostgreSQL, Docker e testes automatizados. Programo desde o fim de 2024. Buscando vaga júnior backend remota.
         </p>
         <div class="abertura__acoes">
           <a class="botao" href="#projetos">Ver projetos</a>
+          <a class="botao botao--linha" href="#contato">Falar comigo</a>
         </div>
       </div>
+      <ul class="abertura__fatos" aria-label="Resumo">
+        <li>Lebon Régis, SC</li>
+        <li>Vaga remota ou estágio</li>
+        <li>Desenvolvimento de Software, SC Tec/Senai</li>
+      </ul>
     </section>
 
     <!-- ============================================================== índice -->
@@ -187,45 +193,58 @@ def editar_tarefas(
           </figure>
         </div>
 
-        <!-- A peça viva: o mesmo pedido feito pela dona e por outro usuário. Funciona sem JavaScript. -->
+        <!-- Demonstração: o mesmo pedido feito pela dona da tarefa e por outro usuário. Funciona sem JavaScript. -->
         <div class="pergunta" id="quem-pede">
           <input class="pergunta__radio" type="radio" name="quem" id="quem-dona" checked />
           <input class="pergunta__radio" type="radio" name="quem" id="quem-outro" />
           <div class="pergunta__campo">
             <div class="largura pergunta__grade">
               <div class="pergunta__texto">
-                <h4 class="pergunta__titulo" id="titulo-quem-pede">
-                  A API responde <span class="so-dona">200</span><span class="so-outro">404</span>
-                </h4>
+                <h4 class="pergunta__titulo" id="titulo-quem-pede">Teste na prática: cada usuário só edita as próprias tarefas</h4>
                 <p>
-                  O mesmo pedido, <code>PUT /tarefas/editar_tarefa/1</code>, feito por duas pessoas. A tarefa é da Ana. Troque quem pede.
+                  A tarefa nº 1 foi criada pela Ana. Abaixo está a resposta real da API quando duas pessoas logadas tentam editar essa mesma tarefa. Escolha quem faz o pedido.
                 </p>
-                <pre class="pergunta__resposta so-dona" tabindex="0" role="region" aria-label="Resposta para a dona da tarefa"><code>HTTP 200
+                <div class="chave" role="group" aria-labelledby="chave-rotulo">
+                  <span class="chave__rotulo" id="chave-rotulo">Quem faz o pedido</span>
+                  <div class="chave__trilho">
+                    <label class="chave__lado chave__lado--dona" for="quem-dona">
+                      <span class="chave__nome">Ana</span>
+                      <span class="chave__papel">dona da tarefa</span>
+                    </label>
+                    <label class="chave__lado chave__lado--outro" for="quem-outro">
+                      <span class="chave__nome">Bruno</span>
+                      <span class="chave__papel">outro usuário</span>
+                    </label>
+                  </div>
+                </div>
+                <p class="pergunta__explica so-dona">
+                  <strong>Resultado: edição aceita.</strong> A Ana é a dona, então a API salva a alteração e devolve a tarefa atualizada.
+                </p>
+                <p class="pergunta__explica so-outro">
+                  <strong>Resultado: edição recusada.</strong> O Bruno está logado, mas a tarefa não é dele. Como a busca já filtra pelo dono, a API responde que a tarefa não existe e não revela nenhum dado da Ana.
+                </p>
+              </div>
+
+              <div class="terminal" aria-live="polite">
+                <p class="terminal__pedido">
+                  <span class="terminal__metodo">PUT</span> <code>/tarefas/editar_tarefa/1</code>
+                  <span class="terminal__quem">token de login <span class="so-dona">da Ana</span><span class="so-outro">do Bruno</span></span>
+                </p>
+                <p class="terminal__status">
+                  <span class="so-dona">200 OK</span><span class="so-outro">404 Não encontrada</span>
+                </p>
+                <pre class="pergunta__resposta so-dona" tabindex="0" role="region" aria-label="Resposta da API para a Ana, dona da tarefa"><code>HTTP 200
 {
   "id": 1,
   "nome": "Estudar Alembic",
   "descricao": "Rodar a segunda migration",
   "status": "concluida"
 }</code></pre>
-                <pre class="pergunta__resposta so-outro" tabindex="0" role="region" aria-label="Resposta para outro usuário"><code>HTTP 404
+                <pre class="pergunta__resposta so-outro" tabindex="0" role="region" aria-label="Resposta da API para o Bruno, outro usuário"><code>HTTP 404
 {
   "detail": "Tarefa não encontrada"
 }</code></pre>
-                <p class="pergunta__nota">Respostas gravadas ao rodar a API localmente em 16/11/2026, com dois usuários de teste.</p>
-              </div>
-              <div class="chave" data-ui>
-                <span class="chave__rotulo" id="chave-rotulo">Quem pede</span>
-                <div class="chave__trilho">
-                  <label class="chave__lado chave__lado--dona" for="quem-dona">
-                    <span class="chave__nome">Ana</span>
-                    <span class="chave__papel">dona da tarefa</span>
-                  </label>
-                  <label class="chave__lado chave__lado--outro" for="quem-outro">
-                    <span class="chave__nome">Bruno</span>
-                    <span class="chave__papel">outro usuário</span>
-                  </label>
-                </div>
-                <span class="chave__valor" aria-hidden="true"><span class="so-dona">200</span><span class="so-outro">404</span></span>
+                <p class="pergunta__nota">Respostas gravadas rodando a API localmente em 16/11/2026, com dois usuários de teste.</p>
               </div>
             </div>
           </div>
@@ -394,7 +413,6 @@ for indice in range(1, 43):
             <tr role="row"><th scope="col" role="columnheader">Tecnologia</th><th scope="col" role="columnheader">Para quê</th><th scope="col" role="columnheader">Onde usei</th></tr>
           </thead>
           <tbody id="tec-dia" role="rowgroup">
-            <tr role="row" class="linhas__grupo"><th colspan="3" scope="colgroup" role="columnheader">Uso no dia a dia</th></tr>
             <tr role="row"><th scope="row" role="rowheader">Python</th><td role="cell">linguagem principal</td><td role="cell">TaskFlow, Autocelesc</td></tr>
             <tr role="row"><th scope="row" role="rowheader">FastAPI</th><td role="cell">APIs REST</td><td role="cell">TaskFlow</td></tr>
             <tr role="row"><th scope="row" role="rowheader">Flask</th><td role="cell">app web com sessão</td><td role="cell">TaskFlow, versão anterior</td></tr>
@@ -410,10 +428,6 @@ for indice in range(1, 43):
             <tr role="row"><th scope="row" role="rowheader">GitHub Actions</th><td role="cell">testes e publicação</td><td role="cell">Custos da Cozinha, CheckLists</td></tr>
             <tr role="row"><th scope="row" role="rowheader">pytest</th><td role="cell">testes automatizados</td><td role="cell">TaskFlow, Custos da Cozinha</td></tr>
             <tr role="row"><th scope="row" role="rowheader">Git</th><td role="cell">versionamento</td><td role="cell">todos os projetos</td></tr>
-          </tbody>
-          <tbody id="tec-aprendendo" role="rowgroup">
-            <tr role="row" class="linhas__grupo"><th colspan="3" scope="colgroup" role="columnheader">Estou aprendendo</th></tr>
-            <tr role="row"><th scope="row" role="rowheader">React</th><td role="cell">interfaces</td><td role="cell">front do TaskFlow, Proteínas</td></tr>
           </tbody>
         </table>
       </div>
@@ -453,7 +467,6 @@ for indice in range(1, 43):
       <div class="largura contato__grade">
         <div class="contato__topo">
           <h2 class="contato__titulo" id="titulo-contato">Contato</h2>
-          <p>Escreva sobre vagas júnior de backend, estágio remoto ou qualquer projeto daqui.</p>
         </div>
         <a class="contato__email" href="mailto:gustavo.silva123913@gmail.com">
           <span>gustavo.silva123913</span><span>@gmail.com</span>
