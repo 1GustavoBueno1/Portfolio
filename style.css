@@ -1011,62 +1011,25 @@ figcaption {
 
 .sobre__fatos {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem var(--calha);
   font-size: var(--t-pequeno);
+}
+
+.sobre__cursos {
+  display: grid;
+  gap: 0.375rem;
+  padding-left: 1rem;
+  list-style: disc;
+}
+
+.sobre__cursos li::marker {
+  color: var(--ouro);
 }
 
 .sobre__fatos dt {
   color: var(--ouro-texto);
   font-weight: 600;
-}
-
-/* --------------------------------------------------------------- cursos */
-
-.cursos {
-  margin-top: clamp(3.5rem, 7vw, 6rem);
-}
-
-.cursos__titulo {
-  font-size: var(--t-lead);
-  letter-spacing: -0.01em;
-}
-
-.cursos__lista {
-  margin-top: 1.25rem;
-  border-top: 2px solid var(--roxo);
-}
-
-.cursos__lista li {
-  display: grid;
-  gap: 0.25rem 2rem;
-  padding-block: 1rem;
-  border-bottom: 1px solid var(--linha);
-}
-
-.cursos__nome {
-  color: var(--roxo);
-  font-family: var(--fonte-titulo);
-  font-size: var(--t-corpo);
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.cursos__origem {
-  color: var(--ouro-texto);
-  font-size: var(--t-pequeno);
-  font-weight: 600;
-}
-
-@media (min-width: 45rem) {
-  .cursos__lista li {
-    grid-template-columns: minmax(0, 1fr) 16rem;
-    align-items: baseline;
-  }
-
-  .cursos__origem {
-    text-align: right;
-  }
 }
 
 /* -------------------------------------------------------------- contato */
