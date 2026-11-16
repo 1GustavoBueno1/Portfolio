@@ -120,7 +120,8 @@ teste("conteudo", "Open Graph, theme-color e favicon", () =>
 teste("conteudo", "um único h1, com o nome", () =>
   comPagina({}, async (p) => {
     exigir((await p.locator("h1").count()) === 1, "deve haver exatamente 1 h1");
-    exigir((await p.locator("h1").innerText()).includes("Gustavo Bueno"), "h1 deve conter o nome");
+    const h1 = (await p.locator("h1").innerText()).replace(/\s+/g, " ").trim();
+    exigir(h1 === "Gustavo Bueno", `h1 deve ser o nome, é "${h1}"`);
   })
 );
 
@@ -267,15 +268,17 @@ teste("conteudo", "imagens com alt, marcos e seções rotuladas", () =>
 
 teste("conteudo", "listas de tecnologias separadas", () =>
   comPagina({}, async (p) => {
-    const sobre = await p.locator("#sobre").innerText();
-    exigir(/uso no dia a dia/i.test(sobre), 'falta a lista "Uso no dia a dia"');
-    exigir(/estou aprendendo/i.test(sobre), 'falta a lista "Estou aprendendo"');
-    const diaADia = await p.$$eval("#tec-dia li", (ls) => ls.map((l) => l.textContent.trim()));
-    const aprendendo = await p.$$eval("#tec-aprendendo li", (ls) => ls.map((l) => l.textContent.trim()));
+    const stack = await p.locator("#stack").innerText();
+    exigir(/uso no dia a dia/i.test(stack), 'falta o grupo "Uso no dia a dia"');
+    exigir(/estou aprendendo/i.test(stack), 'falta o grupo "Estou aprendendo"');
+    const nomes = (sel) => p.$$eval(sel, (ts) => ts.map((t) => t.textContent.trim()));
+    const diaADia = await nomes('#tec-dia th[scope="row"]');
+    const aprendendo = await nomes('#tec-aprendendo th[scope="row"]');
     for (const t of ["PostgreSQL", "Docker", "Alembic", "Node.js", "TypeScript", "Firebase", "GitHub Actions"]) {
       exigir(diaADia.includes(t), `"${t}" deve estar em Uso no dia a dia`);
     }
     exigir(aprendendo.includes("React"), "React deve estar em Estou aprendendo");
+    exigir(!diaADia.includes("React"), "React não pode estar em Uso no dia a dia");
     exigir(!diaADia.includes("SQL"), 'não listar só "SQL"');
   })
 );
@@ -337,7 +340,8 @@ teste("visual", "contraste AA dos tokens de cor", () =>
       const estilo = getComputedStyle(document.documentElement);
       const ler = (n) => estilo.getPropertyValue(n).trim();
       return Object.fromEntries(
-        ["--fundo", "--superficie", "--texto", "--texto-suave", "--acento", "--sobre-acento"].map((n) => [n, ler(n)])
+        ["--fundo", "--superficie", "--texto", "--texto-suave", "--apagado", "--acento", "--sobre-acento",
+         "--violeta", "--violeta-escuro", "--creme", "--tinta", "--codigo-fundo"].map((n) => [n, ler(n)])
       );
     });
     exigir(t["--fundo"].toLowerCase() === "#100b18", `--fundo deve ser #100b18, é "${t["--fundo"]}"`);
@@ -345,6 +349,14 @@ teste("visual", "contraste AA dos tokens de cor", () =>
       ["--fundo", "--texto"], ["--fundo", "--texto-suave"], ["--fundo", "--acento"],
       ["--superficie", "--texto"], ["--superficie", "--texto-suave"], ["--superficie", "--acento"],
       ["--acento", "--sobre-acento"],
+      ["--fundo", "--apagado"],            // nomes inativos do índice
+      ["--codigo-fundo", "--texto"],       // blocos de código
+      ["--acento", "--tinta"],             // campo dourado da chave "quem pede"
+      ["--violeta", "--creme"],            // campo violeta e azulejo do commit
+      ["--creme", "--tinta"],              // seção de contato e trilho da chave
+      ["--creme", "--violeta"],            // links do contato ao passar o mouse
+      ["--violeta-escuro", "--creme"],     // rodapé
+      ["--violeta-escuro", "--texto-suave"],
     ];
     for (const [fundo, texto] of pares) {
       const razao = contraste(t[fundo], t[texto]);
@@ -388,30 +400,36 @@ teste("visual", "em 320 px o trecho de código rola dentro do próprio bloco", (
   })
 );
 
-const caixasDosCards = (p) =>
+// Em cada projeto, o texto e a peça (tela ou código) ficam lado a lado no
+// desktop e empilhados no celular.
+const pecasDosProjetos = (p) =>
   p.$$eval("article.projeto", (as) =>
     as.map((a) => {
-      const r = a.getBoundingClientRect();
-      return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width) };
+      const caixa = (e) => { const r = e.getBoundingClientRect(); return { x: Math.round(r.left), t: Math.round(r.top), b: Math.round(r.bottom) }; };
+      const texto = a.querySelector(".projeto__texto");
+      const peca = a.querySelector(".projeto__peca, .tela--faixa");
+      return { id: a.id, texto: caixa(texto), peca: caixa(peca) };
     })
   );
 
-teste("visual", "em 1280 px: TaskFlow na largura toda, os outros em duas colunas", () =>
+teste("visual", "em 1280 px: texto e peça lado a lado em cada projeto", () =>
   comPagina({ largura: 1280 }, async (p) => {
-    const grade = await p.$eval(".projetos", (e) => Math.round(e.getBoundingClientRect().width));
-    const [principal, c2, c3, c4, c5] = await caixasDosCards(p);
-    exigir(Math.abs(principal.w - grade) <= 2, `TaskFlow com ${principal.w}px, grade com ${grade}px`);
-    exigir(c2.y === c3.y && c2.x < c3.x, "cards 2 e 3 deveriam ficar lado a lado");
-    exigir(c4.y === c5.y && c4.x < c5.x, "cards 4 e 5 deveriam ficar lado a lado");
-    exigir(c2.w < grade / 2 + 2, "cards da grade deveriam ocupar meia largura");
+    for (const pr of await pecasDosProjetos(p)) {
+      if (pr.id === "automacao-empresarial") {
+        exigir(pr.peca.b <= pr.texto.t + 2, `${pr.id}: a tela larga deveria vir acima do texto`);
+        continue;
+      }
+      exigir(pr.texto.x !== pr.peca.x, `${pr.id}: texto e peça deveriam estar em colunas diferentes`);
+      exigir(pr.texto.t < pr.peca.b && pr.peca.t < pr.texto.b, `${pr.id}: texto e peça deveriam dividir a mesma altura`);
+    }
   })
 );
 
-teste("visual", "em 360 px: os cinco cards em uma coluna", () =>
+teste("visual", "em 360 px: texto e peça empilhados", () =>
   comPagina({ largura: 360 }, async (p) => {
-    const cards = await caixasDosCards(p);
-    exigir(new Set(cards.map((c) => c.x)).size === 1, "os cards deveriam ter a mesma margem esquerda");
-    for (let i = 1; i < cards.length; i++) exigir(cards[i].y > cards[i - 1].y, "os cards deveriam ficar empilhados");
+    for (const pr of await pecasDosProjetos(p)) {
+      exigir(pr.texto.b <= pr.peca.t + 2 || pr.peca.b <= pr.texto.t + 2, `${pr.id}: texto e peça deveriam ficar um acima do outro`);
+    }
   })
 );
 
@@ -453,16 +471,18 @@ const movimentoDosRevelados = (p) =>
       const s = getComputedStyle(e);
       return Math.max(...s.transitionDuration.split(",").map(parseFloat), ...s.animationDuration.split(",").map(parseFloat));
     });
-    return { maior: Math.max(...duracoes), rolagem: getComputedStyle(document.documentElement).scrollBehavior };
+    return { maior: Math.max(...duracoes) };
   });
 
-teste("visual", "movimento reduzido desliga transições e rolagem suave", async () => {
+teste("visual", "movimento reduzido desliga transições e animações", async () => {
   const normal = await comPagina({}, movimentoDosRevelados);
   exigir(normal.maior > 0, "sem preferência, os blocos deveriam ter transição de entrada");
-  exigir(normal.rolagem === "smooth", "sem preferência, a rolagem deveria ser suave");
   const reduzido = await comPagina({ movimentoReduzido: true }, movimentoDosRevelados);
   exigir(reduzido.maior === 0, `com movimento reduzido ainda há transição de ${reduzido.maior}s`);
-  exigir(reduzido.rolagem === "auto", "com movimento reduzido a rolagem deve ser imediata");
+  const animados = await comPagina({ movimentoReduzido: true }, (p) =>
+    p.$$eval(".linha > span, .abertura__meio, .abertura__retrato", (es) => es.filter((e) => getComputedStyle(e).animationName !== "none").length)
+  );
+  exigir(animados === 0, `com movimento reduzido ${animados} elemento(s) da abertura ainda animam`);
 });
 
 teste("visual", "fonte dobrada em 640 px não corta nem estoura texto", () =>
@@ -478,10 +498,11 @@ teste("visual", "fonte dobrada em 640 px não corta nem estoura texto", () =>
   })
 );
 
-teste("visual", "fonte Manrope aplicada ao corpo", () =>
+teste("visual", "fonte Hanken Grotesk no corpo, com reserva do sistema", () =>
   comPagina({}, async (p) => {
     const familia = await p.evaluate(() => getComputedStyle(document.body).fontFamily);
-    exigir(/^"?Manrope"?/.test(familia), `font-family do body começa com ${familia.split(",")[0]}`);
+    exigir(/^"?Hanken Grotesk"?/.test(familia), `font-family do body começa com ${familia.split(",")[0]}`);
+    exigir(/system-ui|sans-serif/.test(familia), "falta fonte reserva do sistema");
   })
 );
 
@@ -490,7 +511,7 @@ teste("visual", "fonte Manrope aplicada ao corpo", () =>
 const visivel = (p, seletor) => p.locator(seletor).first().isVisible();
 
 for (const largura of [360, 1280]) {
-  teste("script", `sem JavaScript em ${largura} px: nada escondido e menu aberto`, () =>
+  teste("script", `sem JavaScript em ${largura} px: nada escondido e navegação visível`, () =>
     comPagina({ largura, js: false }, async (p) => {
       const opacidades = await p.$$eval("[data-revelar]", (es) => es.map((e) => getComputedStyle(e).opacity));
       exigir(opacidades.length >= 8, `esperava 8 ou mais blocos com data-revelar, achei ${opacidades.length}`);
@@ -498,43 +519,22 @@ for (const largura of [360, 1280]) {
       for (const alvo of ["#projetos", "#sobre", "#contato"]) {
         exigir(await visivel(p, `nav#menu a[href="${alvo}"]`), `sem JavaScript o link ${alvo} deve estar visível`);
       }
-      exigir(!(await visivel(p, "#menu-botao")), "sem JavaScript o botão de menu não deve aparecer");
     })
   );
 }
 
-teste("script", "menu no celular: abre, fecha com Esc e fecha ao escolher um link", () =>
-  comPagina({ largura: 360 }, async (p, { erros }) => {
-    const expandido = () => p.getAttribute("#menu-botao", "aria-expanded");
-    exigir(await visivel(p, "#menu-botao"), "com JavaScript o botão de menu deve aparecer no celular");
-    exigir(!(await visivel(p, 'nav#menu a[href="#sobre"]')), "o menu deve começar fechado");
-    exigir((await expandido()) === "false", "aria-expanded deve começar em false");
-
-    await p.click("#menu-botao");
-    exigir((await expandido()) === "true", "depois do clique, aria-expanded deve ser true");
-    exigir(await visivel(p, 'nav#menu a[href="#sobre"]'), "depois do clique o menu deve aparecer");
-
-    await p.keyboard.press("Escape");
-    exigir((await expandido()) === "false", "Esc deve fechar o menu");
-    exigir(await p.evaluate(() => document.activeElement.id === "menu-botao"), "Esc deve devolver o foco ao botão");
-
-    await p.focus("#menu-botao");
-    await p.keyboard.press("Enter");
-    exigir((await expandido()) === "true", "Enter no botão deve abrir o menu");
-    await p.click('nav#menu a[href="#sobre"]');
-    exigir((await expandido()) === "false", "escolher um link deve fechar o menu");
-    exigir(erros.length === 0, `erros no console: ${erros.join(" | ")}`);
-  })
-);
-
-teste("script", "em 1280 px o menu fica aberto e sem botão", () =>
-  comPagina({ largura: 1280 }, async (p) => {
-    exigir(!(await visivel(p, "#menu-botao")), "no desktop o botão de menu não deve aparecer");
-    for (const alvo of ["#projetos", "#sobre", "#contato"]) {
-      exigir(await visivel(p, `nav#menu a[href="${alvo}"]`), `no desktop o link ${alvo} deve estar visível`);
-    }
-  })
-);
+teste("script", "navegação: três links visíveis e dentro da tela, no celular e no desktop", async () => {
+  for (const largura of [320, 1280]) {
+    await comPagina({ largura }, async (p) => {
+      for (const alvo of ["#projetos", "#sobre", "#contato"]) {
+        const link = p.locator(`nav#menu a[href="${alvo}"]`);
+        exigir(await link.isVisible(), `em ${largura} px o link ${alvo} deve estar visível`);
+        const r = await link.boundingBox();
+        exigir(r.x >= 0 && r.x + r.width <= largura, `em ${largura} px o link ${alvo} sai da tela`);
+      }
+    });
+  }
+});
 
 teste("script", "ano do rodapé acompanha o relógio", () =>
   // Relógio adiantado para 2031: o "2026" escrito no HTML não basta para passar.
@@ -544,34 +544,76 @@ teste("script", "ano do rodapé acompanha o relógio", () =>
   })
 );
 
-teste("script", "seção ativa marcada na navegação", () =>
+teste("script", "índice: passar o mouse ou focar um nome troca a prévia", () =>
   comPagina({ largura: 1280 }, async (p, { erros }) => {
-    const ativos = () =>
-      p.$$eval('nav#menu a[aria-current="true"]', (as) => as.map((a) => a.getAttribute("href")));
-    exigir((await ativos()).length === 0, "no topo da página nenhum link deve estar ativo");
-    for (const id of ["sobre", "contato", "projetos"]) {
-      await p.evaluate((alvo) => document.getElementById(alvo).scrollIntoView({ behavior: "instant" }), id);
-      await p.waitForTimeout(400);
-      const agora = await ativos();
-      exigir(agora.length === 1 && agora[0] === `#${id}`, `em #${id} o link ativo deveria ser só #${id}, é [${agora}]`);
-    }
+    const ativa = () => p.$eval(".indice__moldura .previa.ativa", (e) => e.getAttribute("data-previa"));
+    exigir((await ativa()) === "0", "a prévia inicial deve ser a do TaskFlow");
+    await p.hover('.indice__nomes a[data-previa="4"]');
+    exigir((await ativa()) === "4", "passar o mouse em Automação Empresarial deve trocar a prévia");
+    exigir((await p.$$(".indice__moldura .previa.ativa")).length === 1, "só uma prévia ativa por vez");
+    await p.focus('.indice__nomes a[data-previa="2"]');
+    exigir((await ativa()) === "2", "focar CheckListsDudu pelo teclado deve trocar a prévia");
+    const ativos = await p.$$eval(".indice__nomes li.ativo", (ls) => ls.length);
+    exigir(ativos === 1, `deveria haver 1 nome ativo, há ${ativos}`);
     exigir(erros.length === 0, `erros no console: ${erros.join(" | ")}`);
   })
 );
 
+for (const js of [true, false]) {
+  teste("script", `chave "quem pede" troca 200 por 404 ${js ? "com" : "sem"} JavaScript`, () =>
+    comPagina({ largura: 1280, js }, async (p) => {
+      const estado = () =>
+        p.evaluate(() => ({
+          titulo: document.querySelector(".pergunta__titulo").innerText.replace(/\s+/g, " ").trim(),
+          resposta: [...document.querySelectorAll(".pergunta__resposta")].filter((e) => e.offsetParent).map((e) => e.innerText.split("\n")[0]),
+          fundo: getComputedStyle(document.querySelector(".pergunta__campo")).backgroundColor,
+        }));
+      const antes = await estado();
+      exigir(antes.titulo === "A API responde 200", `título inicial: "${antes.titulo}"`);
+      exigir(antes.resposta.length === 1 && antes.resposta[0] === "HTTP 200", `resposta inicial: [${antes.resposta}]`);
+      await p.click('label[for="quem-outro"]');
+      await p.waitForTimeout(400); // a cor do campo muda com transição de 0,25 s
+      const depois = await estado();
+      exigir(depois.titulo === "A API responde 404", `depois de trocar: "${depois.titulo}"`);
+      exigir(depois.resposta.length === 1 && depois.resposta[0] === "HTTP 404", `resposta depois: [${depois.resposta}]`);
+      exigir(depois.fundo !== antes.fundo, "o campo deveria trocar de cor");
+    })
+  );
+}
+
+teste("script", 'chave "quem pede" funciona pelo teclado', () =>
+  comPagina({ largura: 1280 }, async (p) => {
+    await p.focus("#quem-dona");
+    await p.keyboard.press("ArrowRight");
+    exigir(await p.isChecked("#quem-outro"), "seta para a direita deveria escolher o outro usuário");
+    const contorno = await p.$eval(".chave__lado--outro", (e) => getComputedStyle(e).outlineStyle);
+    exigir(contorno !== "none", "o lado escolhido pelo teclado precisa de contorno de foco");
+    const nome = await p.$eval("#quem-outro", (e) => e.labels[0].textContent.replace(/\s+/g, " ").trim());
+    exigir(nome === "Bruno outro usuário", `nome acessível do botão: "${nome}"`);
+  })
+);
+
 teste("script", "blocos entram na tela ao rolar e nenhum fica escondido", () =>
-  comPagina({ largura: 360 }, async (p, { erros }) => {
+  comPagina({ largura: 1280 }, async (p, { erros }) => {
     exigir(await p.evaluate(() => document.documentElement.classList.contains("revelar-pronto")), "o script deve marcar html.revelar-pronto");
     const total = await p.locator("[data-revelar]").count();
     const escondidosNoInicio = await p.$$eval("[data-revelar]", (es) => es.filter((e) => getComputedStyle(e).opacity === "0").length);
     exigir(escondidosNoInicio > 0, "blocos fora da tela deveriam começar escondidos");
     for (let i = 0; i < total; i++) {
       await p.locator("[data-revelar]").nth(i).evaluate((e) => e.scrollIntoView({ behavior: "instant", block: "start" }));
-      await p.waitForTimeout(900);
-      const opacidade = await p.locator("[data-revelar]").nth(i).evaluate((e) => getComputedStyle(e).opacity);
-      exigir(opacidade === "1", `bloco ${i + 1} de ${total} ficou com opacidade ${opacidade} depois de entrar na tela`);
+      await p.waitForTimeout(700);
     }
+    await p.waitForTimeout(900);
+    const ainda = await p.$$eval("[data-revelar]", (es) => es.filter((e) => getComputedStyle(e).opacity !== "1").length);
+    exigir(ainda === 0, `${ainda} bloco(s) continuam escondidos depois de passar pela tela`);
     exigir(erros.length === 0, `erros no console: ${erros.join(" | ")}`);
+  })
+);
+
+teste("script", "no celular nenhum bloco espera a rolagem para aparecer", () =>
+  comPagina({ largura: 360 }, async (p) => {
+    const ocultos = await p.$$eval("[data-revelar]", (es) => es.filter((e) => getComputedStyle(e).opacity !== "1").length);
+    exigir(ocultos === 0, `no celular ${ocultos} bloco(s) começam escondidos`);
   })
 );
 
