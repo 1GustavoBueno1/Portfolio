@@ -954,14 +954,15 @@ figcaption {
 .sobre__mosaico {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1rem;
+  gap: 1.5rem var(--calha);
   margin-top: clamp(2.5rem, 5vw, 4.5rem);
 }
 
 .sobre__mapa {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1rem;
+  gap: 0.875rem;
+  min-width: 0;
 }
 
 .sobre__mapa img {
@@ -974,13 +975,8 @@ figcaption {
 
 .sobre__sobre-mapa {
   color: var(--texto-suave);
-}
-
-.sobre__lado {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1.5rem;
-  align-content: start;
+  font-size: var(--t-pequeno);
+  text-align: center;
 }
 
 .sobre__azulejo {
@@ -1325,9 +1321,14 @@ figcaption {
     color: var(--texto-suave);
   }
 
-  .sobre__lado {
+  /* Tablet: mapa em cima, ocupando a largura; commit e fatos lado a lado. */
+  .sobre__mosaico {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--calha);
+  }
+
+  .sobre__mapa {
+    grid-column: 1 / -1;
+    grid-row: 1;
   }
 }
 
@@ -1412,43 +1413,26 @@ figcaption {
     grid-column: 7 / span 6;
   }
 
+  /* Desktop: commit à esquerda, mapa no centro, fatos à direita. */
   .sobre__mosaico {
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 1rem;
     align-items: start;
   }
 
-  .sobre__mapa {
-    position: relative;
-    grid-column: 1 / span 8;
-    display: block;
-  }
-
-  .sobre__mapa img {
-    aspect-ratio: 16 / 10;
-  }
-
-  .sobre__sobre-mapa {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 20rem;
-    max-width: 60%;
-    padding: 1.25rem;
-    border-radius: 10px;
-    background: var(--branco);
-    color: var(--texto);
-    box-shadow: var(--sombra);
-  }
-
-  .sobre__lado {
-    grid-column: 9 / span 4;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
-  }
-
   .sobre__azulejo {
-    min-height: 22rem;
+    grid-column: 1 / span 3;
+    grid-row: 1;
+    align-self: stretch;
+  }
+
+  .sobre__mapa {
+    grid-column: 4 / span 6;
+    grid-row: 1;
+  }
+
+  .sobre__fatos {
+    grid-column: 10 / span 3;
+    grid-row: 1;
   }
 
   .outros-bloco {
