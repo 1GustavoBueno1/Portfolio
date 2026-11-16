@@ -1,0 +1,330 @@
+// Verificador do portfólio. Abre o index.html local no Chromium (Playwright)
+// e confere conteúdo, visual e comportamento do script.
+//
+//   node tests/verificar.mjs            roda todos os grupos
+//   node tests/verificar.mjs conteudo   roda um grupo (conteudo | visual | script)
+//
+// Sai com código 1 se algum teste falhar. No fim, lista as pendências.
+
+import { createRequire } from "node:module";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import path from "node:path";
+import fs from "node:fs";
+
+const require = createRequire(import.meta.url);
+const { chromium } = require("playwright");
+
+const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const PAGINA = pathToFileURL(path.join(RAIZ, "index.html")).href;
+
+const FRASES_PROIBIDAS = [
+  "Sistemas que fazem o trabalho acontecer",
+  "Tecnologia com propósito",
+  "Python no coração",
+  "Disponível para novos projetos",
+  "dezenas de unidades",
+  "desde 2025",
+  "publicado em produção",
+  "publicada em produção",
+  "10 endpoints",
+];
+
+const TRECHOS_PROIBIDOS_EM_LINKS = [
+  "railway.app",
+  "dudu-checklist.web.app",
+  "dudusistemas.web.app",
+  "Automacao-para-contas-de-luz",
+  "TaskFlow-API-FrontEnd",
+  "gustavo-silva",
+];
+
+const NOMES_DOS_PROJETOS = [
+  "TaskFlow",
+  "Custos da Cozinha",
+  "CheckListsDudu",
+  "Autocelesc",
+  "Sistema de Automação Empresarial",
+];
+
+// ---------------------------------------------------------------- estrutura
+
+const testes = [];
+const pendencias = [];
+
+function teste(grupo, nome, fn) {
+  testes.push({ grupo, nome, fn });
+}
+
+function exigir(condicao, mensagem) {
+  if (!condicao) throw new Error(mensagem);
+}
+
+let navegador;
+
+// Abre a página num contexto novo. Pedidos para fora (a fonte do Google) são
+// cortados para o teste não depender de rede.
+async function abrir({ largura = 1280, altura = 900, js = true, movimentoReduzido = false } = {}) {
+  const contexto = await navegador.newContext({
+    viewport: { width: largura, height: altura },
+    javaScriptEnabled: js,
+    reducedMotion: movimentoReduzido ? "reduce" : "no-preference",
+  });
+  await contexto.route("**/*", (rota) =>
+    rota.request().url().startsWith("file:") ? rota.continue() : rota.abort()
+  );
+  const pagina = await contexto.newPage();
+  // Elemento que falta deve reprovar rápido, não esperar 30 s.
+  pagina.setDefaultTimeout(1500);
+  const erros = [];
+  pagina.on("pageerror", (e) => erros.push(String(e)));
+  pagina.on("console", (m) => {
+    if (m.type() === "error" && !m.text().includes("net::ERR")) erros.push(m.text());
+  });
+  await pagina.goto(PAGINA);
+  return { pagina, contexto, erros };
+}
+
+async function comPagina(opcoes, fn) {
+  const aberto = await abrir(opcoes);
+  try {
+    return await fn(aberto.pagina, aberto);
+  } finally {
+    await aberto.contexto.close();
+  }
+}
+
+// ----------------------------------------------------------------- conteudo
+
+teste("conteudo", "idioma, título e descrição", () =>
+  comPagina({}, async (p) => {
+    exigir((await p.getAttribute("html", "lang")) === "pt-BR", 'html lang deve ser "pt-BR"');
+    exigir((await p.title()).trim().length > 10, "title vazio ou curto demais");
+    const desc = await p.getAttribute('meta[name="description"]', "content");
+    exigir(desc && desc.length >= 50 && desc.length <= 160, `meta description com ${desc?.length} caracteres (50 a 160)`);
+  })
+);
+
+teste("conteudo", "Open Graph, theme-color e favicon", () =>
+  comPagina({}, async (p) => {
+    for (const prop of ["og:title", "og:description", "og:type", "og:image", "og:url"]) {
+      const v = await p.getAttribute(`meta[property="${prop}"]`, "content").catch(() => null);
+      exigir(v, `falta meta ${prop}`);
+    }
+    exigir((await p.getAttribute('meta[property="og:locale"]', "content")) === "pt_BR", "og:locale deve ser pt_BR");
+    exigir((await p.getAttribute('meta[name="theme-color"]', "content")) === "#100b18", "theme-color deve ser #100b18");
+    exigir((await p.getAttribute('link[rel="icon"]', "href")) === "assets/favicon.svg", "favicon deve apontar para assets/favicon.svg");
+  })
+);
+
+teste("conteudo", "um único h1, com o nome", () =>
+  comPagina({}, async (p) => {
+    exigir((await p.locator("h1").count()) === 1, "deve haver exatamente 1 h1");
+    exigir((await p.locator("h1").innerText()).includes("Gustavo Bueno"), "h1 deve conter o nome");
+  })
+);
+
+teste("conteudo", "frases obrigatórias e frases proibidas", () =>
+  comPagina({}, async (p) => {
+    const texto = (await p.locator("body").innerText()).toLowerCase();
+    for (const frase of ["Buscando vaga júnior backend remota", "fim de 2024", "cerca de 42 unidades", "8 endpoints", "© 2026"]) {
+      exigir(texto.includes(frase.toLowerCase()), `falta o texto "${frase}"`);
+    }
+    const html = (await p.content()).toLowerCase();
+    for (const frase of FRASES_PROIBIDAS) {
+      exigir(!html.includes(frase.toLowerCase()), `frase proibida presente: "${frase}"`);
+    }
+  })
+);
+
+teste("conteudo", "nenhum link proibido e nenhum formulário", () =>
+  comPagina({}, async (p) => {
+    const hrefs = await p.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
+    for (const href of hrefs) {
+      for (const trecho of TRECHOS_PROIBIDOS_EM_LINKS) {
+        exigir(!href.toLowerCase().includes(trecho.toLowerCase()), `link proibido: ${href}`);
+      }
+    }
+    exigir((await p.locator("form").count()) === 0, "não pode haver <form>");
+  })
+);
+
+teste("conteudo", "cinco cards de projeto, na ordem combinada", () =>
+  comPagina({}, async (p) => {
+    const nomes = await p.$$eval("article.projeto h3", (hs) => hs.map((h) => h.textContent.trim()));
+    exigir(nomes.length === 5, `esperava 5 cards, achei ${nomes.length}`);
+    NOMES_DOS_PROJETOS.forEach((nome, i) =>
+      exigir(nomes[i].startsWith(nome), `card ${i + 1} deveria ser "${nome}", é "${nomes[i]}"`)
+    );
+    exigir((await p.locator("article.projeto--principal").count()) === 1, "só o TaskFlow é o card principal");
+    exigir(
+      (await p.locator("article.projeto--principal h3").innerText()).startsWith("TaskFlow"),
+      "o card principal deve ser o TaskFlow"
+    );
+  })
+);
+
+teste("conteudo", "cada card tem 3 a 5 destaques e pelo menos 3 tags", () =>
+  comPagina({}, async (p) => {
+    const cards = await p.$$eval("article.projeto", (as) =>
+      as.map((a) => ({
+        nome: a.querySelector("h3").textContent.trim(),
+        destaques: a.querySelectorAll("ul.destaques > li").length,
+        tags: a.querySelectorAll("ul.tags > li").length,
+        problema: (a.querySelector("p.projeto__problema")?.textContent || "").trim().length,
+      }))
+    );
+    for (const c of cards) {
+      exigir(c.destaques >= 3 && c.destaques <= 5, `${c.nome}: ${c.destaques} destaques (3 a 5)`);
+      exigir(c.tags >= 3, `${c.nome}: ${c.tags} tags (mínimo 3)`);
+      exigir(c.problema > 20, `${c.nome}: falta a frase do problema`);
+    }
+  })
+);
+
+teste("conteudo", "autoria declarada nos sistemas feitos com apoio de IA", () =>
+  comPagina({}, async (p) => {
+    for (const nome of ["Custos da Cozinha", "CheckListsDudu"]) {
+      const card = p.locator("article.projeto", { has: p.locator("h3", { hasText: nome }) });
+      const autoria = await card.locator("p.autoria").innerText();
+      exigir(/apoio de IA/i.test(autoria), `${nome}: a autoria deve citar o apoio de IA`);
+    }
+    exigir((await p.locator("ul.outros > li").count()) === 2, "Outros sistemas deve ter 2 linhas");
+    const outros = await p.locator("ul.outros").innerText();
+    exigir((outros.match(/apoio de IA/gi) || []).length === 2, "as 2 linhas de Outros sistemas citam o apoio de IA");
+  })
+);
+
+teste("conteudo", "trecho de código do TaskFlow presente e focável", () =>
+  comPagina({}, async (p) => {
+    const pre = p.locator("article.projeto--principal pre.codigo");
+    exigir((await pre.count()) === 1, "falta o pre.codigo no card do TaskFlow");
+    exigir((await pre.getAttribute("tabindex")) === "0", "pre.codigo precisa de tabindex=0");
+    exigir(await pre.getAttribute("aria-label"), "pre.codigo precisa de aria-label");
+    exigir((await pre.innerText()).includes("Tasks.user_id == usuario.id"), "o trecho deve mostrar a checagem de dono");
+  })
+);
+
+teste("conteudo", "links externos seguros e com texto descritivo", () =>
+  comPagina({}, async (p) => {
+    const links = await p.$$eval('a[href^="http"]', (as) =>
+      as.map((a) => ({
+        href: a.getAttribute("href"),
+        alvo: a.getAttribute("target"),
+        rel: a.getAttribute("rel") || "",
+        texto: a.textContent.replace(/\s+/g, " ").trim(),
+      }))
+    );
+    exigir(links.length >= 8, `poucos links externos (${links.length})`);
+    for (const l of links) {
+      exigir(l.alvo === "_blank", `${l.href}: falta target=_blank`);
+      exigir(l.rel.includes("noopener") && l.rel.includes("noreferrer"), `${l.href}: falta rel noopener noreferrer`);
+      exigir((l.texto.match(/\p{L}/gu) || []).length >= 4, `${l.href}: texto do link não é descritivo ("${l.texto}")`);
+    }
+  })
+);
+
+teste("conteudo", "contatos corretos", () =>
+  comPagina({}, async (p) => {
+    for (const href of [
+      "mailto:gustavo.silva123913@gmail.com",
+      "https://www.linkedin.com/in/gustavo-bueno-da-silva-a351a33bb",
+      "https://github.com/1GustavoBueno1",
+      "https://wa.me/5549999615535",
+    ]) {
+      exigir((await p.locator(`#contato a[href="${href}"]`).count()) === 1, `falta o contato ${href}`);
+    }
+    exigir(
+      (await p.locator('a[href="assets/curriculo-gustavo-bueno.pdf"][download]').count()) === 2,
+      "o currículo deve ter 2 links com download (abertura e contato)"
+    );
+  })
+);
+
+teste("conteudo", "imagens com alt, marcos e seções rotuladas", () =>
+  comPagina({}, async (p) => {
+    const semAlt = await p.$$eval("img", (is) => is.filter((i) => !i.hasAttribute("alt")).length);
+    exigir(semAlt === 0, `${semAlt} imagem(ns) sem alt`);
+    for (const marco of ["header", "main", "footer", "nav"]) {
+      exigir((await p.locator(marco).count()) >= 1, `falta <${marco}>`);
+    }
+    exigir((await p.getAttribute("a.pular", "href")) === "#conteudo", "link de pular deve apontar para #conteudo");
+    exigir((await p.locator("main#conteudo").count()) === 1, "falta main#conteudo");
+    const secoes = await p.$$eval("section", (ss) =>
+      ss.map((s) => {
+        const id = s.getAttribute("aria-labelledby");
+        return { id: s.id, rotulo: id, existe: !!(id && document.getElementById(id)) };
+      })
+    );
+    for (const id of ["inicio", "projetos", "sobre", "contato"]) {
+      exigir(secoes.some((s) => s.id === id), `falta a seção #${id}`);
+    }
+    for (const s of secoes) exigir(s.existe, `seção #${s.id} sem aria-labelledby válido`);
+  })
+);
+
+teste("conteudo", "listas de tecnologias separadas", () =>
+  comPagina({}, async (p) => {
+    const sobre = await p.locator("#sobre").innerText();
+    exigir(/uso no dia a dia/i.test(sobre), 'falta a lista "Uso no dia a dia"');
+    exigir(/estou aprendendo/i.test(sobre), 'falta a lista "Estou aprendendo"');
+    const diaADia = await p.$$eval("#tec-dia li", (ls) => ls.map((l) => l.textContent.trim()));
+    const aprendendo = await p.$$eval("#tec-aprendendo li", (ls) => ls.map((l) => l.textContent.trim()));
+    for (const t of ["PostgreSQL", "Docker", "Alembic", "Node.js", "TypeScript", "Firebase", "GitHub Actions"]) {
+      exigir(diaADia.includes(t), `"${t}" deve estar em Uso no dia a dia`);
+    }
+    exigir(aprendendo.includes("React"), "React deve estar em Estou aprendendo");
+    exigir(!diaADia.includes("SQL"), 'não listar só "SQL"');
+  })
+);
+
+teste("conteudo", "pendências (não reprova): arquivos que faltam e TODOs", () =>
+  comPagina({}, async (p) => {
+    const locais = await p.$$eval("[href], [src]", (es) =>
+      es
+        .map((e) => e.getAttribute("href") || e.getAttribute("src"))
+        .filter((v) => v && !/^(https?:|mailto:|#|data:)/.test(v))
+    );
+    for (const rel of new Set(locais)) {
+      if (!fs.existsSync(path.join(RAIZ, rel))) pendencias.push(`arquivo referenciado não existe: ${rel}`);
+    }
+    const ogImagem = await p.getAttribute('meta[property="og:image"]', "content").catch(() => null);
+    const nomeOg = ogImagem && ogImagem.split("/Portfolio/")[1];
+    if (nomeOg && !fs.existsSync(path.join(RAIZ, nomeOg))) pendencias.push(`arquivo referenciado não existe: ${nomeOg}`);
+    for (const t of await p.$$eval("span.todo", (ss) => ss.map((s) => s.textContent.trim()))) {
+      pendencias.push(`TODO visível na página: ${t}`);
+    }
+    const html = fs.readFileSync(path.join(RAIZ, "index.html"), "utf8");
+    for (const m of html.matchAll(/<!--\s*TODO:\s*([\s\S]*?)-->/g)) {
+      pendencias.push(`TODO em comentário: ${m[1].replace(/\s+/g, " ").trim()}`);
+    }
+  })
+);
+
+// ----------------------------------------------------------------- execução
+
+const grupoPedido = process.argv[2];
+const aRodar = testes.filter((t) => !grupoPedido || t.grupo === grupoPedido);
+if (aRodar.length === 0) {
+  console.error(`Nenhum teste no grupo "${grupoPedido}".`);
+  process.exit(1);
+}
+
+navegador = await chromium.launch();
+let falhas = 0;
+for (const t of aRodar) {
+  try {
+    await t.fn();
+    console.log(`  ok    [${t.grupo}] ${t.nome}`);
+  } catch (e) {
+    falhas++;
+    console.log(`  FALHA [${t.grupo}] ${t.nome}\n          ${String(e.message).split("\n")[0]}`);
+  }
+}
+await navegador.close();
+
+console.log(`\n${aRodar.length - falhas} de ${aRodar.length} testes passaram.`);
+if (pendencias.length) {
+  console.log("\nPendências:");
+  for (const item of pendencias) console.log(`  - ${item}`);
+}
+process.exit(falhas ? 1 : 0);
