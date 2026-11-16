@@ -237,10 +237,8 @@ teste("conteudo", "contatos corretos", () =>
     ]) {
       exigir((await p.locator(`#contato a[href="${href}"]`).count()) === 1, `falta o contato ${href}`);
     }
-    exigir(
-      (await p.locator('a[href="assets/curriculo-gustavo-bueno.pdf"][download]').count()) === 2,
-      "o currículo deve ter 2 links com download (abertura e contato)"
-    );
+    // O currículo saiu da página: nenhum link pode apontar para um PDF que não existe.
+    exigir((await p.locator('a[href$=".pdf"]').count()) === 0, "não deve haver link para currículo em PDF");
   })
 );
 
@@ -368,7 +366,7 @@ teste("visual", "contraste AA dos tokens de cor", () =>
 teste("visual", "contraste do aviso de TODO e do bloco de código", () =>
   comPagina({}, async (p) => {
     const cores = await p.evaluate(() =>
-      ["span.todo", "pre.codigo"].map((sel) => {
+      ["pre.codigo"].map((sel) => {
         const e = getComputedStyle(document.querySelector(sel));
         return { sel, cor: e.color, fundo: e.backgroundColor };
       })

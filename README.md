@@ -18,7 +18,6 @@ Feito com HTML, CSS e JavaScript puros, sem framework e sem etapa de build.
 | `assets/credits.json` | Origem e licença das imagens de terceiros |
 | `assets/favicon.svg` | Ícone da aba |
 | `assets/og-image.png` | Imagem que aparece ao compartilhar o link (1200×630) |
-| `assets/curriculo-gustavo-bueno.pdf` | Currículo. **Ainda não está no repositório** |
 | `tests/verificar.mjs` | Verificador automático (não faz parte do site) |
 | `docs/` | Especificação e plano do site |
 
@@ -67,8 +66,6 @@ publicada sozinha.
 
 ## Pendências
 
-- [ ] Colocar o currículo em `assets/curriculo-gustavo-bueno.pdf` e apagar o aviso de
-      TODO ao lado do botão, na seção Contato do `index.html`.
 - [ ] Autocelesc: revisar o repositório antes de linkar no card.
 - [ ] TaskFlow: no front em React, trocar o token fixo pelo token do login. Depois
       linkar o repositório `TaskFlow-API-FrontEnd` no card.
