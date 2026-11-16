@@ -1,4 +1,4 @@
-Meu Portfolio
+## Meu Portfolio
 
 Site estático de uma página, em português, publicado no GitHub Pages:
 https://1gustavobueno1.github.io/Portfolio/
