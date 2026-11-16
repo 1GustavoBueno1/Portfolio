@@ -63,7 +63,7 @@ let navegador;
 
 // Abre a página num contexto novo. Pedidos para fora (a fonte do Google) são
 // cortados para o teste não depender de rede.
-async function abrir({ largura = 1280, altura = 900, js = true, movimentoReduzido = false } = {}) {
+async function abrir({ largura = 1280, altura = 900, js = true, movimentoReduzido = false, antes } = {}) {
   const contexto = await navegador.newContext({
     viewport: { width: largura, height: altura },
     javaScriptEnabled: js,
@@ -80,6 +80,7 @@ async function abrir({ largura = 1280, altura = 900, js = true, movimentoReduzid
   pagina.on("console", (m) => {
     if (m.type() === "error" && !m.text().includes("net::ERR")) erros.push(m.text());
   });
+  if (antes) await antes(pagina);
   await pagina.goto(PAGINA);
   return { pagina, contexto, erros };
 }
@@ -446,6 +447,7 @@ const movimentoDosRevelados = (p) =>
   p.evaluate(() => {
     document.documentElement.classList.add("revelar-pronto");
     const duracoes = [...document.querySelectorAll("[data-revelar]")].map((e) => {
+      e.classList.add("visivel");
       const s = getComputedStyle(e);
       return Math.max(...s.transitionDuration.split(",").map(parseFloat), ...s.animationDuration.split(",").map(parseFloat));
     });
@@ -478,6 +480,103 @@ teste("visual", "fonte Manrope aplicada ao corpo", () =>
   comPagina({}, async (p) => {
     const familia = await p.evaluate(() => getComputedStyle(document.body).fontFamily);
     exigir(/^"?Manrope"?/.test(familia), `font-family do body começa com ${familia.split(",")[0]}`);
+  })
+);
+
+// ------------------------------------------------------------------- script
+
+const visivel = (p, seletor) => p.locator(seletor).first().isVisible();
+
+for (const largura of [360, 1280]) {
+  teste("script", `sem JavaScript em ${largura} px: nada escondido e menu aberto`, () =>
+    comPagina({ largura, js: false }, async (p) => {
+      const opacidades = await p.$$eval("[data-revelar]", (es) => es.map((e) => getComputedStyle(e).opacity));
+      exigir(opacidades.length >= 8, `esperava 8 ou mais blocos com data-revelar, achei ${opacidades.length}`);
+      exigir(opacidades.every((o) => o === "1"), "sem JavaScript todo bloco deve ter opacidade 1");
+      for (const alvo of ["#projetos", "#sobre", "#contato"]) {
+        exigir(await visivel(p, `nav#menu a[href="${alvo}"]`), `sem JavaScript o link ${alvo} deve estar visível`);
+      }
+      exigir(!(await visivel(p, "#menu-botao")), "sem JavaScript o botão de menu não deve aparecer");
+    })
+  );
+}
+
+teste("script", "menu no celular: abre, fecha com Esc e fecha ao escolher um link", () =>
+  comPagina({ largura: 360 }, async (p, { erros }) => {
+    const expandido = () => p.getAttribute("#menu-botao", "aria-expanded");
+    exigir(await visivel(p, "#menu-botao"), "com JavaScript o botão de menu deve aparecer no celular");
+    exigir(!(await visivel(p, 'nav#menu a[href="#sobre"]')), "o menu deve começar fechado");
+    exigir((await expandido()) === "false", "aria-expanded deve começar em false");
+
+    await p.click("#menu-botao");
+    exigir((await expandido()) === "true", "depois do clique, aria-expanded deve ser true");
+    exigir(await visivel(p, 'nav#menu a[href="#sobre"]'), "depois do clique o menu deve aparecer");
+
+    await p.keyboard.press("Escape");
+    exigir((await expandido()) === "false", "Esc deve fechar o menu");
+    exigir(await p.evaluate(() => document.activeElement.id === "menu-botao"), "Esc deve devolver o foco ao botão");
+
+    await p.focus("#menu-botao");
+    await p.keyboard.press("Enter");
+    exigir((await expandido()) === "true", "Enter no botão deve abrir o menu");
+    await p.click('nav#menu a[href="#sobre"]');
+    exigir((await expandido()) === "false", "escolher um link deve fechar o menu");
+    exigir(erros.length === 0, `erros no console: ${erros.join(" | ")}`);
+  })
+);
+
+teste("script", "em 1280 px o menu fica aberto e sem botão", () =>
+  comPagina({ largura: 1280 }, async (p) => {
+    exigir(!(await visivel(p, "#menu-botao")), "no desktop o botão de menu não deve aparecer");
+    for (const alvo of ["#projetos", "#sobre", "#contato"]) {
+      exigir(await visivel(p, `nav#menu a[href="${alvo}"]`), `no desktop o link ${alvo} deve estar visível`);
+    }
+  })
+);
+
+teste("script", "ano do rodapé acompanha o relógio", () =>
+  // Relógio adiantado para 2031: o "2026" escrito no HTML não basta para passar.
+  comPagina({ antes: (p) => p.clock.setFixedTime(new Date("2031-03-01T12:00:00")) }, async (p) => {
+    const ano = await p.innerText("#ano");
+    exigir(ano === "2031", `com o relógio em 2031, #ano mostra "${ano}"`);
+  })
+);
+
+teste("script", "seção ativa marcada na navegação", () =>
+  comPagina({ largura: 1280 }, async (p, { erros }) => {
+    const ativos = () =>
+      p.$$eval('nav#menu a[aria-current="true"]', (as) => as.map((a) => a.getAttribute("href")));
+    exigir((await ativos()).length === 0, "no topo da página nenhum link deve estar ativo");
+    for (const id of ["sobre", "contato", "projetos"]) {
+      await p.evaluate((alvo) => document.getElementById(alvo).scrollIntoView({ behavior: "instant" }), id);
+      await p.waitForTimeout(400);
+      const agora = await ativos();
+      exigir(agora.length === 1 && agora[0] === `#${id}`, `em #${id} o link ativo deveria ser só #${id}, é [${agora}]`);
+    }
+    exigir(erros.length === 0, `erros no console: ${erros.join(" | ")}`);
+  })
+);
+
+teste("script", "blocos entram na tela ao rolar e nenhum fica escondido", () =>
+  comPagina({ largura: 360 }, async (p, { erros }) => {
+    exigir(await p.evaluate(() => document.documentElement.classList.contains("revelar-pronto")), "o script deve marcar html.revelar-pronto");
+    const total = await p.locator("[data-revelar]").count();
+    const escondidosNoInicio = await p.$$eval("[data-revelar]", (es) => es.filter((e) => getComputedStyle(e).opacity === "0").length);
+    exigir(escondidosNoInicio > 0, "blocos fora da tela deveriam começar escondidos");
+    for (let i = 0; i < total; i++) {
+      await p.locator("[data-revelar]").nth(i).evaluate((e) => e.scrollIntoView({ behavior: "instant", block: "start" }));
+      await p.waitForTimeout(900);
+      const opacidade = await p.locator("[data-revelar]").nth(i).evaluate((e) => getComputedStyle(e).opacity);
+      exigir(opacidade === "1", `bloco ${i + 1} de ${total} ficou com opacidade ${opacidade} depois de entrar na tela`);
+    }
+    exigir(erros.length === 0, `erros no console: ${erros.join(" | ")}`);
+  })
+);
+
+teste("script", "com movimento reduzido o script não esconde nada", () =>
+  comPagina({ largura: 360, movimentoReduzido: true }, async (p) => {
+    const opacidades = await p.$$eval("[data-revelar]", (es) => es.map((e) => getComputedStyle(e).opacity));
+    exigir(opacidades.every((o) => o === "1"), "com movimento reduzido todo bloco deve ter opacidade 1");
   })
 );
 

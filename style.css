@@ -659,15 +659,17 @@ code {
     transition: transform 0.15s ease;
   }
 
+  /* Esconder é imediato; só a entrada é animada. Assim o que já está na
+     tela ao carregar não pisca. */
   .revelar-pronto [data-revelar] {
     opacity: 0;
     transform: translateY(1rem);
-    transition: opacity 0.5s ease, transform 0.5s ease;
   }
 
   .revelar-pronto [data-revelar].visivel {
     opacity: 1;
     transform: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
   }
 }
 
@@ -675,5 +677,10 @@ code {
   .topo,
   .pular {
     display: none;
+  }
+
+  [data-revelar] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
