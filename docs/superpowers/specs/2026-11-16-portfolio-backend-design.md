@@ -28,8 +28,7 @@ backend 100% remota e também estágio remoto.
   "Python no coração") ou métrica inventada.
 - Afirmar algo que o histórico do git desmente.
 - Mostrar dado real de empresa ou da prefeitura (nomes de unidades, contratos, valores).
-- Linkar o repositório do Autocelesc enquanto `perfil_celesc/` (cookies, login salvo e
-  tokens) estiver no histórico.
+- Linkar o repositório do Autocelesc antes da revisão combinada com o Gustavo.
 
 ## Restrições
 
@@ -157,7 +156,7 @@ apoio de IA, links só se existirem.
 ## Pendências (TODO visível no site e listado na entrega)
 
 - Currículo em PDF em `assets/`.
-- Link do Autocelesc: depois de remover `perfil_celesc/` do histórico.
+- Link do Autocelesc: depois da revisão do repositório.
 - Front do TaskFlow: linkar depois do conserto do token fixo.
 - Prints e foto: não fornecidos; site sem imagens de projeto e sem foto.
 

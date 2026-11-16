@@ -63,9 +63,7 @@ publicada sozinha.
 
 - [ ] Colocar o currículo em `assets/curriculo-gustavo-bueno.pdf` e apagar o aviso de
       TODO ao lado do botão, na seção Contato do `index.html`.
-- [ ] Autocelesc: remover a pasta `perfil_celesc/` do histórico do repositório
-      `Automacao-para-contas-de-luz` (ela guarda cookies e login salvo) e trocar a
-      senha da conta. Só depois linkar o repositório no card.
+- [ ] Autocelesc: revisar o repositório antes de linkar no card.
 - [ ] TaskFlow: no front em React, trocar o token fixo pelo token do login. Depois
       linkar o repositório `TaskFlow-API-FrontEnd` no card.
 - [ ] TaskFlow: criar um README no repositório `TaskFlow-FastAPI`.
