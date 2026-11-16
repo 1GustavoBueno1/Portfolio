@@ -201,6 +201,8 @@ teste("conteudo", "trecho de código do TaskFlow presente e focável", () =>
     exigir((await pre.count()) === 1, "falta o pre.codigo no card do TaskFlow");
     exigir((await pre.getAttribute("tabindex")) === "0", "pre.codigo precisa de tabindex=0");
     exigir(await pre.getAttribute("aria-label"), "pre.codigo precisa de aria-label");
+    // aria-label só vale em elemento com papel; num <pre> puro ele é ignorado.
+    exigir((await pre.getAttribute("role")) === "region", 'pre.codigo precisa de role="region" para o aria-label valer');
     exigir((await pre.innerText()).includes("Tasks.user_id == usuario.id"), "o trecho deve mostrar a checagem de dono");
   })
 );

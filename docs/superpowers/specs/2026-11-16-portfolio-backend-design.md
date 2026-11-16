@@ -140,7 +140,8 @@ apoio de IA, links só se existirem.
   SQLAlchemy, Alembic, Docker, Playwright, Firebase, GitHub Actions, pytest, Git.
 - Estou aprendendo: React.
 - E-mail: gustavo.silva123913@gmail.com. GitHub: 1GustavoBueno1. LinkedIn:
-  gustavo-bueno-da-silva-a351a33bb.
+  gustavo-bueno-da-silva-a351a33bb. WhatsApp: 49 99961-5535 (confirmado pelo Gustavo),
+  como link `wa.me`, sem o número escrito na página.
 
 ## Direção visual
 
@@ -156,7 +157,6 @@ apoio de IA, links só se existirem.
 ## Pendências (TODO visível no site e listado na entrega)
 
 - Currículo em PDF em `assets/`.
-- WhatsApp: o número informado tem 10 dígitos; falta confirmar antes de linkar.
 - Link do Autocelesc: depois de remover `perfil_celesc/` do histórico.
 - Front do TaskFlow: linkar depois do conserto do token fixo.
 - Prints e foto: não fornecidos; site sem imagens de projeto e sem foto.

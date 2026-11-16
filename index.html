@@ -93,7 +93,7 @@
               <!-- TODO: linkar o front em React (TaskFlow-API-FrontEnd) depois de trocar o token fixo pelo token do login. -->
             </div>
             <figure class="projeto__codigo">
-              <pre class="codigo" tabindex="0" aria-label="Trecho da API: edição de tarefa com checagem de dono"><code>@rotas_tarefas.put(
+              <pre class="codigo" tabindex="0" role="region" aria-label="Trecho da API: edição de tarefa com checagem de dono"><code>@rotas_tarefas.put(
     "/editar_tarefa/{id_tarefa}",
     response_model=SaidaDaTarefa,
 )
@@ -148,7 +148,7 @@ def editar_tarefas(
             <h3>CheckListsDudu</h3>
             <p class="projeto__problema">Checklist diário por setor, preenchido no celular, para o chefe conferir o que foi feito em cada turno.</p>
             <ul class="destaques">
-              <li>Cinco setores, cada um com conta própria, que vê e preenche só o próprio checklist. Três deles têm turnos de almoço e noite.</li>
+              <li>Cinco setores, cada um com conta própria, que vê e preenche só o próprio checklist. Quatro deles têm turnos de almoço e noite, e a limpeza é diária.</li>
               <li>Nos itens que pedem foto, o “Sim” só é aceito com a foto gravada junto. A imagem é reduzida no celular antes do envio.</li>
               <li>Cada resposta guarda o nome de quem preencheu, e o painel do chefe mostra progresso, observações e fotos por data.</li>
               <li>Limpeza automática: fotos são apagadas em 7 dias e respostas em 30.</li>
