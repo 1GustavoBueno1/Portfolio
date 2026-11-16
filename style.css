@@ -19,6 +19,11 @@
   --roxo-escuro: #1e0f38;
   --lilas: #cdbdf0;
 
+  /* Faixas escuras que intercalam com o branco. */
+  --roxo-noite: #24103f;
+  --roxo-fundo-noite: #170a2b;
+  --apagado-noite: #a495cc;
+
   --ouro: #e8b84a;
   --ouro-texto: #8a6310;
   --branco: #ffffff;
@@ -165,6 +170,39 @@ figcaption code {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* ---------------------------------------------------------- faixa roxa */
+
+/* Blocos de fundo roxo escuro com letra branca, intercalando com o branco
+   em grupos (abertura branca, índice roxo, primeiros projetos brancos,
+   últimos projetos roxos, tecnologias e sobre brancos, contato roxo).
+   Os componentes usam os tokens, então basta trocar os tokens aqui. */
+.faixa-roxa {
+  --fundo: var(--roxo-noite);
+  --superficie: rgb(255 255 255 / 0.08);
+  --linha: rgb(255 255 255 / 0.14);
+  --texto: var(--branco);
+  --texto-suave: var(--lilas);
+  --apagado: var(--apagado-noite);
+  --roxo: var(--branco);
+  --roxo-medio: var(--ouro);
+  --ouro-texto: var(--ouro);
+  --codigo-fundo: var(--roxo-fundo-noite);
+  --sombra: 0 24px 48px -20px rgb(0 0 0 / 0.6);
+
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+.faixa-roxa ::selection {
+  background: var(--ouro);
+  color: var(--roxo-noite);
+}
+
+.faixa-roxa--projetos {
+  margin-top: clamp(4.5rem, 9vw, 8rem);
+  padding-bottom: var(--entre-secoes);
 }
 
 /* ---------------------------------------------------------------- pular */
@@ -374,8 +412,7 @@ figcaption code {
 /* --------------------------------------------------------------- índice */
 
 .indice {
-  padding-top: var(--entre-secoes);
-  border-top: 1px solid var(--linha);
+  padding-block: var(--entre-secoes);
 }
 
 .indice__titulo {
@@ -988,7 +1025,7 @@ figcaption {
 
 .contato {
   margin-top: var(--entre-secoes);
-  background: var(--roxo);
+  background: var(--roxo-noite);
   color: var(--branco);
 }
 
@@ -1066,7 +1103,7 @@ figcaption {
 /* --------------------------------------------------------------- rodapé */
 
 .rodape {
-  background: var(--roxo-escuro);
+  background: var(--roxo-fundo-noite);
   color: var(--branco);
 }
 

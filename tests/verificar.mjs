@@ -336,7 +336,8 @@ teste("visual", "contraste AA dos tokens de cor", () =>
       const ler = (n) => estilo.getPropertyValue(n).trim();
       return Object.fromEntries(
         ["--fundo", "--superficie", "--texto", "--texto-suave", "--apagado", "--roxo", "--roxo-escuro",
-         "--lilas", "--ouro", "--ouro-texto", "--branco", "--codigo-fundo"].map((n) => [n, ler(n)])
+         "--lilas", "--ouro", "--ouro-texto", "--branco", "--codigo-fundo",
+         "--roxo-noite", "--roxo-fundo-noite", "--apagado-noite"].map((n) => [n, ler(n)])
       );
     });
     exigir(t["--fundo"].toLowerCase() === "#ffffff", `--fundo deve ser #ffffff, é "${t["--fundo"]}"`);
@@ -352,6 +353,10 @@ teste("visual", "contraste AA dos tokens de cor", () =>
       ["--codigo-fundo", "--branco", 4.5], ["--codigo-fundo", "--lilas", 4.5], ["--codigo-fundo", "--ouro", 4.5],
       ["--roxo-escuro", "--branco", 4.5], ["--roxo-escuro", "--lilas", 4.5], ["--roxo-escuro", "--ouro", 4.5],
       ["--ouro", "--roxo-escuro", 4.5],      // selo PUT e seleção de texto
+      // faixas roxas (índice, últimos projetos, contato) e rodapé
+      ["--roxo-noite", "--branco", 4.5], ["--roxo-noite", "--lilas", 4.5], ["--roxo-noite", "--ouro", 4.5],
+      ["--roxo-noite", "--apagado-noite", 3],  // nomes inativos do índice (texto grande)
+      ["--roxo-fundo-noite", "--branco", 4.5], ["--roxo-fundo-noite", "--lilas", 4.5], ["--roxo-fundo-noite", "--ouro", 4.5],
     ];
     for (const [fundo, texto, minimo] of pares) {
       const razao = contraste(t[fundo], t[texto]);
