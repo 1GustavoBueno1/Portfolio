@@ -1,6 +1,6 @@
 // Melhorias progressivas do portfólio. A página funciona inteira sem este
-// arquivo: ele só cuida do menu no celular, da seção ativa na navegação,
-// do ano do rodapé e da entrada suave dos blocos.
+// arquivo: ele cuida do ano do rodapé, da prévia do índice de projetos e
+// da entrada suave dos blocos. A troca "quem pede" é feita só com CSS.
 (function () {
   "use strict";
 
@@ -11,81 +11,56 @@
   var ano = document.getElementById("ano");
   if (ano) ano.textContent = String(new Date().getFullYear());
 
-  // ---- Menu no celular -----------------------------------------------------
-  var botao = document.getElementById("menu-botao");
-  var menu = document.getElementById("menu");
+  // ---- Índice de projetos: o nome ativo troca a prévia ---------------------
+  var itens = Array.prototype.slice.call(document.querySelectorAll(".indice__nomes li"));
+  var previas = Array.prototype.slice.call(document.querySelectorAll(".indice__moldura .previa"));
 
-  if (botao && menu) {
-    var aberto = function () {
-      return botao.getAttribute("aria-expanded") === "true";
-    };
-    var definir = function (valor) {
-      botao.setAttribute("aria-expanded", valor ? "true" : "false");
-    };
-
-    botao.hidden = false;
-
-    botao.addEventListener("click", function () {
-      definir(!aberto());
+  function ativar(item) {
+    var alvo = item.querySelector("a").getAttribute("data-previa");
+    itens.forEach(function (outro) {
+      outro.classList.toggle("ativo", outro === item);
     });
-
-    menu.addEventListener("click", function (evento) {
-      if (evento.target.closest("a")) definir(false);
-    });
-
-    document.addEventListener("keydown", function (evento) {
-      if (evento.key === "Escape" && aberto()) {
-        definir(false);
-        botao.focus();
-      }
+    previas.forEach(function (previa) {
+      previa.classList.toggle("ativa", previa.getAttribute("data-previa") === alvo);
     });
   }
 
-  if (!("IntersectionObserver" in window)) return;
-
-  // ---- Seção ativa na navegação --------------------------------------------
-  // Vale a seção que cruza uma linha a 45% da altura da tela.
-  var links = {};
-  document.querySelectorAll('#menu a[href^="#"]').forEach(function (link) {
-    links[link.getAttribute("href").slice(1)] = link;
-  });
-
-  var observadorDeSecoes = new IntersectionObserver(
-    function (entradas) {
-      entradas.forEach(function (entrada) {
-        var link = links[entrada.target.id];
-        if (!link) return;
-        if (entrada.isIntersecting) link.setAttribute("aria-current", "true");
-        else link.removeAttribute("aria-current");
-      });
-    },
-    { rootMargin: "-45% 0px -55% 0px" }
-  );
-
-  Object.keys(links).forEach(function (id) {
-    var secao = document.getElementById(id);
-    if (secao) observadorDeSecoes.observe(secao);
+  itens.forEach(function (item) {
+    var link = item.querySelector("a");
+    link.addEventListener("mouseenter", function () { ativar(item); });
+    link.addEventListener("focus", function () { ativar(item); });
   });
 
   // ---- Entrada suave dos blocos --------------------------------------------
   // Pulada para quem pediu movimento reduzido. O CSS só esconde os blocos
   // depois que html.revelar-pronto existe, então a classe entra por último.
+  if (!("IntersectionObserver" in window)) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.matchMedia("(min-width: 45rem)").matches) return;
 
-  var blocos = document.querySelectorAll("[data-revelar]");
-  var observadorDeBlocos = new IntersectionObserver(
+  var blocos = Array.prototype.slice.call(document.querySelectorAll("[data-revelar]"));
+
+  // Irmãos entram em sequência: título, depois texto, depois imagem.
+  blocos.forEach(function (bloco) {
+    var irmaos = Array.prototype.filter.call(bloco.parentElement.children, function (el) {
+      return el.hasAttribute("data-revelar");
+    });
+    bloco.style.setProperty("--ordem", String(Math.min(irmaos.indexOf(bloco), 5)));
+  });
+
+  var observador = new IntersectionObserver(
     function (entradas) {
       entradas.forEach(function (entrada) {
         if (!entrada.isIntersecting) return;
         entrada.target.classList.add("visivel");
-        observadorDeBlocos.unobserve(entrada.target);
+        observador.unobserve(entrada.target);
       });
     },
-    { rootMargin: "0px 0px -8% 0px" }
+    { rootMargin: "0px 0px -6% 0px" }
   );
 
   blocos.forEach(function (bloco) {
-    observadorDeBlocos.observe(bloco);
+    observador.observe(bloco);
   });
   raiz.classList.add("revelar-pronto");
 })();

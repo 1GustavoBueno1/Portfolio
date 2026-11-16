@@ -54,7 +54,7 @@ style.css
 script.js
 assets/favicon.svg
 assets/og-image.png                 1200x630, gerada
-assets/curriculo-gustavo-bueno.pdf  o Gustavo coloca
+(currículo removido do site a pedido do Gustavo, em 16/11/2026)
 README.md                           como rodar e publicar
 ```
 

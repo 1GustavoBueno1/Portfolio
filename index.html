@@ -24,7 +24,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&display=swap" />
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
@@ -32,68 +32,132 @@
   <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
   <header class="topo">
-    <div class="largura topo__linha">
-      <a class="topo__nome" href="#inicio">Gustavo Bueno</a>
-      <button class="menu-botao" id="menu-botao" type="button" aria-controls="menu" aria-expanded="false" hidden>Menu</button>
-      <nav class="menu" id="menu" aria-label="Navegação principal">
-        <ul>
-          <li><a href="#projetos">Projetos</a></li>
-          <li><a href="#sobre">Sobre</a></li>
-          <li><a href="#contato">Contato</a></li>
-        </ul>
-      </nav>
-    </div>
+    <nav class="menu" id="menu" aria-label="Navegação principal">
+      <ul>
+        <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </nav>
   </header>
 
   <main id="conteudo">
+    <!-- ============================================================ abertura -->
     <section class="abertura" id="inicio" aria-labelledby="titulo-inicio">
-      <div class="largura">
-        <p class="selo"><span class="selo__ponto" aria-hidden="true"></span>Buscando vaga júnior backend remota</p>
-        <h1 id="titulo-inicio">Gustavo Bueno, desenvolvedor backend júnior</h1>
+      <img class="abertura__retrato" src="assets/retrato-gustavo.webp" width="1100" height="1375" fetchpriority="high"
+           alt="Retrato de Gustavo Bueno, em tons de roxo, olhando para a câmera" />
+      <h1 class="abertura__nome" id="titulo-inicio">
+        <span class="linha linha--1"><span>Gustavo</span></span>
+        <span class="linha linha--2"><span>Bueno</span></span>
+      </h1>
+      <div class="abertura__meio">
         <p class="abertura__texto">
-          Construo APIs com Python (FastAPI) e Node.js com TypeScript, usando PostgreSQL, Docker e testes automatizados. Programo desde o fim de 2024.
+          Desenvolvedor backend júnior. Construo APIs com Python (FastAPI) e Node.js com TypeScript, usando PostgreSQL, Docker e testes automatizados. Programo desde o fim de 2024. Buscando vaga júnior backend remota.
         </p>
         <div class="abertura__acoes">
-          <a class="botao botao--cheio" href="#projetos">Ver projetos</a>
-          <a class="botao" href="assets/curriculo-gustavo-bueno.pdf" download>Baixar currículo (PDF)</a>
+          <a class="botao" href="#projetos">Ver projetos</a>
         </div>
       </div>
     </section>
 
-    <section class="secao" id="projetos" aria-labelledby="titulo-projetos">
+    <!-- ============================================================== índice -->
+    <section class="indice" id="projetos" aria-labelledby="titulo-projetos">
       <div class="largura">
-        <h2 class="secao__titulo" id="titulo-projetos"><span class="secao__numero">01</span> Projetos</h2>
-        <p class="secao__intro">
-          Cinco projetos em destaque. Em cada um digo o que ele resolve e como foi construído. Onde houve apoio de IA, digo o que foi escrito por mim.
-        </p>
+        <h2 class="indice__titulo" id="titulo-projetos" data-revelar>Sete projetos</h2>
+        <div class="indice__grade">
+          <ul class="indice__nomes">
+            <li class="ativo" data-revelar>
+              <a href="#taskflow" data-previa="0"><span class="indice__nome">TaskFlow</span></a>
+            </li>
+            <li data-revelar>
+              <a href="#custos-da-cozinha" data-previa="1"><span class="indice__nome">Custos da Cozinha</span></a>
+            </li>
+            <li data-revelar>
+              <a href="#checklistsdudu" data-previa="2"><span class="indice__nome">CheckListsDudu</span></a>
+            </li>
+            <li data-revelar>
+              <a href="#autocelesc" data-previa="3"><span class="indice__nome">Autocelesc</span></a>
+            </li>
+            <li data-revelar>
+              <a href="#automacao-empresarial" data-previa="4"><span class="indice__nome">Automação Empresarial</span></a>
+            </li>
+            <li data-revelar>
+              <a href="#controle-de-proteinas" data-previa="5"><span class="indice__nome">Controle de Proteínas</span></a>
+            </li>
+            <li data-revelar>
+              <a href="#cadastro-de-refeicoes" data-previa="6"><span class="indice__nome">Cadastro de Refeições</span></a>
+            </li>
+          </ul>
 
-        <div class="projetos">
-          <article class="projeto projeto--principal" data-revelar>
-            <div class="projeto__texto">
-              <p class="projeto__tipo">Projeto principal</p>
-              <h3>TaskFlow</h3>
-              <p class="projeto__problema">Gerenciador de tarefas em que cada usuário vê e altera só as próprias tarefas.</p>
-              <ul class="destaques">
-                <li>API REST em FastAPI com 8 endpoints: cadastro, login, perfil e CRUD de tarefas.</li>
-                <li>Login com JWT que expira em 60 minutos e senhas guardadas com hash bcrypt.</li>
-                <li>Toda consulta de tarefa filtra pelo dono: editar ou apagar a tarefa de outro usuário devolve 404, e a exclusão tem teste automatizado.</li>
-                <li>SQLAlchemy com PostgreSQL 16, migrations com Alembic e Docker Compose subindo a API e o banco.</li>
-                <li>8 testes com pytest, rodando em SQLite em memória por meio de <code>dependency_overrides</code>.</li>
-              </ul>
-              <p class="projeto__nota">
-                O projeto começou como uma CLI em Python com MySQL. A versão seguinte, em Flask e MySQL, tem três camadas (rotas, serviços e repositórios), proteção CSRF, limite de requisições e login por sessão. O front em React com TypeScript está em desenvolvimento.
-              </p>
-              <ul class="tags" aria-label="Tecnologias do TaskFlow">
-                <li>Python</li><li>FastAPI</li><li>SQLAlchemy</li><li>PostgreSQL</li><li>Alembic</li><li>Docker</li><li>JWT</li><li>pytest</li>
-              </ul>
-              <ul class="links">
-                <li><a href="https://github.com/1GustavoBueno1/TaskFlow-FastAPI" target="_blank" rel="noopener noreferrer">Código da API no GitHub</a></li>
-                <li><a href="https://github.com/1GustavoBueno1/TaskFlow" target="_blank" rel="noopener noreferrer">Código da versão Flask no GitHub</a></li>
-              </ul>
-              <!-- TODO: linkar o front em React (TaskFlow-API-FrontEnd) depois de trocar o token fixo pelo token do login. -->
-            </div>
-            <figure class="projeto__codigo">
-              <pre class="codigo" tabindex="0" role="region" aria-label="Trecho da API: edição de tarefa com checagem de dono"><code>@rotas_tarefas.put(
+          <div class="indice__moldura" aria-hidden="true">
+            <img class="previa ativa" data-previa="0" src="assets/tela-taskflow-docs.webp" width="880" height="1100" loading="lazy" alt="" />
+            <img class="previa previa--visor" data-previa="1" src="assets/tela-pesagem-celular.webp" width="600" height="1298" loading="lazy" alt="" />
+            <img class="previa previa--meio" data-previa="2" src="assets/tela-checklist-celular.webp" width="600" height="1298" loading="lazy" alt="" />
+            <pre class="previa previa--codigo" data-previa="3"><code>for indice in range(1, 43):
+    baixar_conta_da_unidade(indice)
+
+try:
+    botao_2via.wait_for(
+        state="visible",
+        timeout=15000,
+    )
+except PlaywrightTimeoutError:
+    print(f"Unidade {indice}: "
+          "sem fatura aberta, pulando.")
+    voltar_para_selecao()
+    return</code></pre>
+            <img class="previa previa--esquerda" data-previa="4" src="assets/tela-automacao-jobs.webp" width="1500" height="609" loading="lazy" alt="" />
+            <pre class="previa previa--codigo" data-previa="5"><code>export function calcularCustoCentavos(
+  consumoGramas: number,
+  precoPorKgCentavos: number,
+): number {
+  return Math.round(
+    (consumoGramas * precoPorKgCentavos)
+      / 1000,
+  )
+}</code></pre>
+            <img class="previa previa--esquerda" data-previa="6" src="assets/tela-refeicoes-dia.webp" width="1440" height="760" loading="lazy" alt="" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================== destaques -->
+    <section class="destaques-secao" id="destaques" aria-labelledby="titulo-destaques">
+      <div class="largura destaques-secao__topo">
+        <h2 class="secao__titulo" id="titulo-destaques" data-revelar>Cinco em destaque</h2>
+        <p class="secao__intro" data-revelar>
+          Em cada um digo o que ele resolve e como foi construído. Onde houve apoio de IA, digo o que foi escrito por mim. As telas mostram os sistemas rodando com dados de exemplo.
+        </p>
+      </div>
+
+      <!-- 1. TaskFlow -->
+      <article class="projeto projeto--principal" id="taskflow">
+        <div class="largura projeto__grade projeto__grade--taskflow">
+          <h3 class="projeto__titulo" data-revelar>TaskFlow</h3>
+          <div class="projeto__texto">
+            <p class="projeto__problema" data-revelar>Gerenciador de tarefas em que cada usuário vê e altera só as próprias tarefas.</p>
+            <ul class="tags" aria-label="Tecnologias do TaskFlow" data-revelar>
+              <li>Python</li><li>FastAPI</li><li>SQLAlchemy</li><li>PostgreSQL</li><li>Alembic</li><li>Docker</li><li>JWT</li><li>pytest</li>
+            </ul>
+            <ul class="destaques" data-revelar>
+              <li>API REST em FastAPI com 8 endpoints: cadastro, login, perfil e CRUD de tarefas.</li>
+              <li>Login com JWT que expira em 60 minutos e senhas guardadas com hash bcrypt.</li>
+              <li>Toda consulta de tarefa filtra pelo dono: editar ou apagar a tarefa de outro usuário devolve 404, e a exclusão tem teste automatizado.</li>
+              <li>SQLAlchemy com PostgreSQL 16, migrations com Alembic e Docker Compose subindo a API e o banco.</li>
+              <li>8 testes com pytest, rodando em SQLite em memória por meio de <code>dependency_overrides</code>.</li>
+            </ul>
+            <p class="projeto__nota" data-revelar>
+              O projeto começou como uma CLI em Python com MySQL. A versão seguinte, em Flask e MySQL, tem três camadas (rotas, serviços e repositórios), proteção CSRF, limite de requisições e login por sessão. O front em React com TypeScript está em desenvolvimento.
+            </p>
+            <ul class="links" data-revelar>
+              <li><a href="https://github.com/1GustavoBueno1/TaskFlow-FastAPI" target="_blank" rel="noopener noreferrer">Código da API no GitHub</a></li>
+              <li><a href="https://github.com/1GustavoBueno1/TaskFlow" target="_blank" rel="noopener noreferrer">Código da versão Flask no GitHub</a></li>
+            </ul>
+            <!-- TODO: linkar o front em React (TaskFlow-API-FrontEnd) depois de trocar o token fixo pelo token do login. -->
+          </div>
+          <figure class="projeto__peca projeto__peca--codigo" data-revelar>
+            <pre class="codigo" tabindex="0" role="region" aria-label="Trecho da API: edição de tarefa com checagem de dono"><code>@rotas_tarefas.put(
     "/editar_tarefa/{id_tarefa}",
     response_model=SaidaDaTarefa,
 )
@@ -119,98 +183,197 @@ def editar_tarefas(
     db.commit()
     db.refresh(tarefa)
     return tarefa</code></pre>
-              <figcaption>Trecho de <code>task_routes.py</code>, com as quebras de linha ajustadas para caber aqui. A busca já filtra pelo dono, então a tarefa de outro usuário não é encontrada.</figcaption>
-            </figure>
-          </article>
+            <figcaption>Trecho de <code>task_routes.py</code>, com as quebras de linha ajustadas para caber aqui. A busca já filtra pelo dono, então a tarefa de outro usuário não é encontrada.</figcaption>
+          </figure>
+        </div>
 
-          <article class="projeto" data-revelar>
-            <p class="projeto__tipo">Em uso na Dudu Bebidas</p>
-            <h3>Custos da Cozinha (app de pesagem)</h3>
-            <p class="projeto__problema">Registra o peso de cada alimento que sai da cozinha e o que volta como sobra, para calcular o custo de produção do dia.</p>
-            <ul class="destaques">
+        <!-- A peça viva: o mesmo pedido feito pela dona e por outro usuário. Funciona sem JavaScript. -->
+        <div class="pergunta" id="quem-pede">
+          <input class="pergunta__radio" type="radio" name="quem" id="quem-dona" checked />
+          <input class="pergunta__radio" type="radio" name="quem" id="quem-outro" />
+          <div class="pergunta__campo">
+            <div class="largura pergunta__grade">
+              <div class="pergunta__texto">
+                <h4 class="pergunta__titulo" id="titulo-quem-pede">
+                  A API responde <span class="so-dona">200</span><span class="so-outro">404</span>
+                </h4>
+                <p>
+                  O mesmo pedido, <code>PUT /tarefas/editar_tarefa/1</code>, feito por duas pessoas. A tarefa é da Ana. Troque quem pede.
+                </p>
+                <pre class="pergunta__resposta so-dona" tabindex="0" role="region" aria-label="Resposta para a dona da tarefa"><code>HTTP 200
+{
+  "id": 1,
+  "nome": "Estudar Alembic",
+  "descricao": "Rodar a segunda migration",
+  "status": "concluida"
+}</code></pre>
+                <pre class="pergunta__resposta so-outro" tabindex="0" role="region" aria-label="Resposta para outro usuário"><code>HTTP 404
+{
+  "detail": "Tarefa não encontrada"
+}</code></pre>
+                <p class="pergunta__nota">Respostas gravadas ao rodar a API localmente em 16/11/2026, com dois usuários de teste.</p>
+              </div>
+              <div class="chave" data-ui>
+                <span class="chave__rotulo" id="chave-rotulo">Quem pede</span>
+                <div class="chave__trilho">
+                  <label class="chave__lado chave__lado--dona" for="quem-dona">
+                    <span class="chave__nome">Ana</span>
+                    <span class="chave__papel">dona da tarefa</span>
+                  </label>
+                  <label class="chave__lado chave__lado--outro" for="quem-outro">
+                    <span class="chave__nome">Bruno</span>
+                    <span class="chave__papel">outro usuário</span>
+                  </label>
+                </div>
+                <span class="chave__valor" aria-hidden="true"><span class="so-dona">200</span><span class="so-outro">404</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. Custos da Cozinha -->
+      <article class="projeto" id="custos-da-cozinha">
+        <div class="largura projeto__grade projeto__grade--custos">
+          <h3 class="projeto__titulo" data-revelar>Custos da Cozinha (app de pesagem)</h3>
+          <div class="projeto__peca projeto__peca--par">
+            <img class="tela tela--larga" data-revelar src="assets/tela-pesagem-hoje.webp" width="1500" height="914" loading="lazy"
+                 alt="Tela Hoje do app Custos da Cozinha: 22,050 kg de peso líquido, R$ 352,09 de custo de produção e três saídas de exemplo" />
+            <img class="tela tela--celular" data-revelar src="assets/tela-pesagem-celular.webp" width="600" height="1298" loading="lazy"
+                 alt="Registro de saída no celular: feijão na panela, peso bruto 12,4 kg, peso líquido 8,600 kg e custo do alimento R$ 76,54" />
+          </div>
+          <div class="projeto__texto">
+            <p class="projeto__tipo" data-revelar>Em uso na Dudu Bebidas.</p>
+            <p class="projeto__problema" data-revelar>Registra o peso de cada alimento que sai da cozinha e o que volta como sobra, para calcular o custo de produção do dia.</p>
+            <ul class="tags" aria-label="Tecnologias do app de pesagem" data-revelar>
+              <li>JavaScript</li><li>Vite</li><li>Firebase</li><li>Vitest</li><li>GitHub Actions</li><li>Python</li><li>pytest</li>
+            </ul>
+            <ul class="destaques" data-revelar>
               <li>Calcula peso líquido, custo de produção e percentual de sobra com decimal exato, sem ponto flutuante.</li>
               <li>Cada saída guarda uma cópia da tara, do preço por quilo e da taxa do momento, então mudar o cadastro não altera relatórios antigos.</li>
               <li>Gera o relatório do dia em PDF no próprio navegador.</li>
               <li>Regras de segurança do Firestore testadas no emulador: só a conta do dono lê e grava.</li>
               <li>O GitHub Actions roda os testes e só publica se todos passarem.</li>
             </ul>
-            <p class="autoria"><strong>Autoria:</strong> escrevi as regras de cálculo e os 32 testes em Python (pytest). O app web foi desenvolvido com apoio de IA (Claude Code).</p>
-            <ul class="tags" aria-label="Tecnologias do app de pesagem">
-              <li>JavaScript</li><li>Vite</li><li>Firebase</li><li>Vitest</li><li>GitHub Actions</li><li>Python</li><li>pytest</li>
-            </ul>
-            <ul class="links">
+            <p class="autoria" data-revelar><strong>Autoria:</strong> escrevi as regras de cálculo e os 32 testes em Python (pytest). O app web foi desenvolvido com apoio de IA (Claude Code).</p>
+            <ul class="links" data-revelar>
               <li><a href="https://github.com/1GustavoBueno1/App-de-pesagem-de-alimentos" target="_blank" rel="noopener noreferrer">Código do app de pesagem no GitHub</a></li>
             </ul>
-          </article>
+          </div>
+        </div>
+      </article>
 
-          <article class="projeto" data-revelar>
-            <p class="projeto__tipo">Em uso na Dudu Bebidas</p>
-            <h3>CheckListsDudu</h3>
-            <p class="projeto__problema">Checklist diário por setor, preenchido no celular, para o chefe conferir o que foi feito em cada turno.</p>
-            <ul class="destaques">
+      <!-- 3. CheckListsDudu -->
+      <article class="projeto" id="checklistsdudu">
+        <div class="largura projeto__grade projeto__grade--checklists">
+          <h3 class="projeto__titulo" data-revelar>CheckListsDudu</h3>
+          <div class="projeto__texto">
+            <p class="projeto__tipo" data-revelar>Em uso na Dudu Bebidas.</p>
+            <p class="projeto__problema" data-revelar>Checklist diário por setor, preenchido no celular, para o chefe conferir o que foi feito em cada turno.</p>
+            <ul class="tags" aria-label="Tecnologias do CheckListsDudu" data-revelar>
+              <li>JavaScript</li><li>Vite</li><li>Firebase</li><li>Vitest</li><li>GitHub Actions</li>
+            </ul>
+            <ul class="destaques" data-revelar>
               <li>Cinco setores, cada um com conta própria, que vê e preenche só o próprio checklist. Quatro deles têm turnos de almoço e noite, e a limpeza é diária.</li>
               <li>Nos itens que pedem foto, o “Sim” só é aceito com a foto gravada junto. A imagem é reduzida no celular antes do envio.</li>
               <li>Cada resposta guarda o nome de quem preencheu, e o painel do chefe mostra progresso, observações e fotos por data.</li>
               <li>Limpeza automática: fotos são apagadas em 7 dias e respostas em 30.</li>
               <li>Regras do Firestore testadas com Vitest nos emuladores do Firebase. O GitHub Actions só publica se os testes passarem.</li>
             </ul>
-            <p class="autoria"><strong>Autoria:</strong> especifiquei, revisei e publiquei o sistema. O código foi desenvolvido com apoio de IA (Claude Code).</p>
-            <ul class="tags" aria-label="Tecnologias do CheckListsDudu">
-              <li>JavaScript</li><li>Vite</li><li>Firebase</li><li>Vitest</li><li>GitHub Actions</li>
-            </ul>
-            <ul class="links">
+            <p class="autoria" data-revelar><strong>Autoria:</strong> especifiquei, revisei e publiquei o sistema. O código foi desenvolvido com apoio de IA (Claude Code).</p>
+            <ul class="links" data-revelar>
               <li><a href="https://github.com/1GustavoBueno1/CheckListsDudu" target="_blank" rel="noopener noreferrer">Código do CheckListsDudu no GitHub</a></li>
             </ul>
-          </article>
+          </div>
+          <div class="projeto__peca projeto__peca--celulares">
+            <img class="tela tela--celular" data-revelar src="assets/tela-checklist-celular.webp" width="600" height="1298" loading="lazy"
+                 alt="Checklist da cozinha no celular: itens que exigem foto respondidos com Sim, com o nome de quem preencheu" />
+            <img class="tela tela--celular tela--abaixo" data-revelar src="assets/tela-checklist-painel.webp" width="600" height="1298" loading="lazy"
+                 alt="Painel do chefe no celular: avisos da limpeza e o progresso do almoço da cozinha" />
+          </div>
+        </div>
+      </article>
 
-          <article class="projeto" data-revelar>
-            <p class="projeto__tipo">Automação</p>
-            <h3>Autocelesc</h3>
-            <p class="projeto__problema">Baixa a 2ª via das faturas de energia da CELESC de cerca de 42 unidades de uma prefeitura, sem abrir o portal unidade por unidade.</p>
-            <ul class="destaques">
+      <!-- 4. Autocelesc -->
+      <article class="projeto" id="autocelesc">
+        <div class="largura projeto__grade projeto__grade--autocelesc">
+          <h3 class="projeto__titulo" data-revelar>Autocelesc</h3>
+          <figure class="projeto__peca projeto__peca--codigo" data-revelar>
+            <pre class="codigo" tabindex="0" role="region" aria-label="Trecho do Autocelesc: unidade sem fatura é pulada"><code>botao_2via = pagina.get_by_role(
+    "button", name="receipt_long 2ª via de conta"
+)
+try:
+    botao_2via.wait_for(state="visible", timeout=15000)
+except PlaywrightTimeoutError:
+    print(f"Unidade {indice}: sem fatura aberta, pulando.")
+    voltar_para_selecao()
+    return
+
+# ...
+
+for indice in range(1, 43):
+    baixar_conta_da_unidade(indice)</code></pre>
+            <figcaption>Trechos de <code>auto.py</code>: se o botão da 2ª via não aparece em 15 segundos, a unidade é pulada e o laço segue pelas 42.</figcaption>
+          </figure>
+          <div class="projeto__texto">
+            <p class="projeto__problema" data-revelar>Baixa a 2ª via das faturas de energia da CELESC de cerca de 42 unidades de uma prefeitura, sem abrir o portal unidade por unidade.</p>
+            <ul class="tags" aria-label="Tecnologias do Autocelesc" data-revelar>
+              <li>Python</li><li>Playwright</li><li>python-dotenv</li>
+            </ul>
+            <ul class="destaques" data-revelar>
               <li>Faz login no portal com Playwright e percorre as unidades uma a uma, salvando cada PDF com nome único.</li>
               <li>Espera o carregamento terminar e fecha o aviso que cobre a tela antes de clicar.</li>
               <li>Unidade sem fatura em aberto é pulada sem interromper a execução. Se o download não vem, o bot salva uma captura de tela para depuração.</li>
               <li>Pausa entre as ações e navega por dentro do site, sem recarregar a página, para reduzir o risco de bloqueio.</li>
               <li>Se o portal bloquear o IP, a execução é retomada manualmente a partir da unidade em que parou.</li>
             </ul>
-            <ul class="tags" aria-label="Tecnologias do Autocelesc">
-              <li>Python</li><li>Playwright</li><li>python-dotenv</li>
-            </ul>
             <!-- TODO: linkar o repositório do Autocelesc depois da revisão dele. -->
-          </article>
+          </div>
+        </div>
+      </article>
 
-          <article class="projeto" data-revelar>
-            <p class="projeto__tipo">Projeto de aprendizado</p>
-            <h3>Sistema de Automação Empresarial</h3>
-            <p class="projeto__problema">API para cadastrar clientes, automações e as execuções delas (jobs), com acesso separado por perfil. É um projeto de aprendizado, sem usuários reais.</p>
-            <ul class="destaques">
+      <!-- 5. Sistema de Automação Empresarial -->
+      <article class="projeto" id="automacao-empresarial">
+        <div class="largura projeto__grade projeto__grade--automacao">
+          <h3 class="projeto__titulo" data-revelar>Sistema de Automação Empresarial</h3>
+          <img class="tela tela--larga tela--faixa" data-revelar src="assets/tela-automacao-jobs.webp" width="1500" height="609" loading="lazy"
+               alt="Tela de jobs do Sistema de Automação Empresarial com quatro jobs de exemplo: pendente, erro, processando e concluído" />
+          <div class="projeto__texto projeto__texto--a">
+            <p class="projeto__problema" data-revelar>API para cadastrar clientes, automações e as execuções delas (jobs), com acesso separado por perfil. É um projeto de aprendizado, sem usuários reais.</p>
+            <ul class="tags" aria-label="Tecnologias do Sistema de Automação Empresarial" data-revelar>
+              <li>Node.js</li><li>TypeScript</li><li>Express</li><li>PostgreSQL</li><li>Docker</li><li>JWT</li>
+            </ul>
+            <ul class="links" data-revelar>
+              <li><a href="https://github.com/1GustavoBueno1/webapp-de-automa-o" target="_blank" rel="noopener noreferrer">Código do Sistema de Automação no GitHub</a></li>
+            </ul>
+          </div>
+          <div class="projeto__texto projeto__texto--b">
+            <ul class="destaques" data-revelar>
               <li>Camadas separadas: Routes → Controllers → Services → Repositories.</li>
               <li>Login com JWT e dois perfis, ADMIN e FUNCIONARIO. Rotas como cadastrar cliente ou excluir automação exigem ADMIN.</li>
               <li>16 endpoints para usuários, clientes, automações e jobs, com os status PENDENTE, PROCESSANDO, CONCLUIDO e ERRO.</li>
               <li>PostgreSQL 16 em Docker Compose, migrations em SQL e queries parametrizadas com o driver <code>pg</code>.</li>
               <li>Limitações: ainda não há worker (o status do job é atualizado pela API) nem testes automatizados, e o front foi feito com apoio de IA.</li>
             </ul>
-            <ul class="tags" aria-label="Tecnologias do Sistema de Automação Empresarial">
-              <li>Node.js</li><li>TypeScript</li><li>Express</li><li>PostgreSQL</li><li>Docker</li><li>JWT</li>
-            </ul>
-            <ul class="links">
-              <li><a href="https://github.com/1GustavoBueno1/webapp-de-automa-o" target="_blank" rel="noopener noreferrer">Código do Sistema de Automação no GitHub</a></li>
-            </ul>
-          </article>
+          </div>
         </div>
+      </article>
 
-        <div class="outros-bloco" data-revelar>
-          <h3 class="outros__titulo">Outros sistemas feitos para a Dudu Bebidas</h3>
+      <!-- Outros sistemas -->
+      <div class="largura outros-bloco">
+        <img class="tela tela--larga" data-revelar src="assets/tela-refeicoes-dia.webp" width="1440" height="760" loading="lazy"
+             alt="Cadastro de Refeições: lançamento do dia de uma empresa de exemplo, com quantidades, preços, total e duas notas fiscais" />
+        <div class="outros__texto">
+          <h3 class="outros__titulo" data-revelar>Outros sistemas feitos para a Dudu Bebidas</h3>
           <ul class="outros">
-            <li>
+            <li id="controle-de-proteinas" data-revelar>
               <strong>Controle de proteínas.</strong>
               Saída e retorno diário de carnes, custo do dia e relatório.
               <span class="outros__stack">TypeScript, React, Vite e Firestore, com as regras do Firestore testadas com Vitest.</span>
               Regras, serviços e cálculos escritos por mim; interface com apoio de IA.
               <a href="https://github.com/1GustavoBueno1/ControleDeProteinas" target="_blank" rel="noopener noreferrer">Código do Controle de proteínas no GitHub</a>
             </li>
-            <li>
+            <li id="cadastro-de-refeicoes" data-revelar>
               <strong>Cadastro de refeições por empresa.</strong>
               Lançamento diário de refeições, fotos das notas convertidas em PDF, PDF mensal e fechamento do mês.
               <span class="outros__stack">React, TypeScript e Firebase.</span>
@@ -222,65 +385,124 @@ def editar_tarefas(
       </div>
     </section>
 
-    <section class="secao" id="sobre" aria-labelledby="titulo-sobre">
-      <div class="largura sobre">
-        <div data-revelar>
-          <h2 class="secao__titulo" id="titulo-sobre"><span class="secao__numero">02</span> Sobre</h2>
-          <p class="sobre__texto">
-            Sou Gustavo Bueno da Silva, desenvolvedor backend autodidata, e programo em Python desde o fim de 2024. Busco minha primeira vaga júnior de backend 100% remota ou um estágio remoto em tecnologia. Moro em Lebon Régis, Santa Catarina, e estou aberto a mudança de cidade e a viagens. Concluo o ensino médio em dezembro de 2026 e curso a trilha de Desenvolvimento de Software do SC Tec/Senai.
-          </p>
-        </div>
-        <div class="tecnologias" data-revelar>
-          <div>
-            <h3 id="titulo-tec-dia">Uso no dia a dia</h3>
-            <ul class="tags" id="tec-dia" aria-labelledby="titulo-tec-dia">
-              <li>Python</li><li>FastAPI</li><li>Flask</li><li>Node.js</li><li>TypeScript</li><li>Express</li><li>PostgreSQL</li><li>SQLAlchemy</li><li>Alembic</li><li>Docker</li><li>Playwright</li><li>Firebase</li><li>GitHub Actions</li><li>pytest</li><li>Git</li>
-            </ul>
-          </div>
-          <div>
-            <h3 id="titulo-tec-aprendendo">Estou aprendendo</h3>
-            <ul class="tags" id="tec-aprendendo" aria-labelledby="titulo-tec-aprendendo">
-              <li>React</li>
-            </ul>
+    <!-- =============================================================== stack -->
+    <section class="stack" id="stack" aria-labelledby="titulo-stack">
+      <div class="largura">
+        <h2 class="secao__titulo" id="titulo-stack" data-revelar>Tecnologias</h2>
+        <table class="linhas" role="table" aria-label="Tecnologias que uso e onde usei" data-revelar>
+          <thead class="visualmente-oculto" role="rowgroup">
+            <tr role="row"><th scope="col" role="columnheader">Tecnologia</th><th scope="col" role="columnheader">Para quê</th><th scope="col" role="columnheader">Onde usei</th></tr>
+          </thead>
+          <tbody id="tec-dia" role="rowgroup">
+            <tr role="row" class="linhas__grupo"><th colspan="3" scope="colgroup" role="columnheader">Uso no dia a dia</th></tr>
+            <tr role="row"><th scope="row" role="rowheader">Python</th><td role="cell">linguagem principal</td><td role="cell">TaskFlow, Autocelesc</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">FastAPI</th><td role="cell">APIs REST</td><td role="cell">TaskFlow</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Flask</th><td role="cell">app web com sessão</td><td role="cell">TaskFlow, versão anterior</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Node.js</th><td role="cell">servidor da API</td><td role="cell">Automação Empresarial</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">TypeScript</th><td role="cell">tipos no back e no front</td><td role="cell">Automação, Proteínas</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Express</th><td role="cell">rotas e middlewares</td><td role="cell">Automação Empresarial</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">PostgreSQL</th><td role="cell">banco relacional</td><td role="cell">TaskFlow, Automação</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">SQLAlchemy</th><td role="cell">ORM</td><td role="cell">TaskFlow</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Alembic</th><td role="cell">migrations</td><td role="cell">TaskFlow</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Docker</th><td role="cell">Compose da API e do banco</td><td role="cell">TaskFlow, Automação</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Playwright</th><td role="cell">automação de navegador</td><td role="cell">Autocelesc</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Firebase</th><td role="cell">login, banco e hospedagem</td><td role="cell">sistemas da Dudu Bebidas</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">GitHub Actions</th><td role="cell">testes e publicação</td><td role="cell">Custos da Cozinha, CheckLists</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">pytest</th><td role="cell">testes automatizados</td><td role="cell">TaskFlow, Custos da Cozinha</td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Git</th><td role="cell">versionamento</td><td role="cell">todos os projetos</td></tr>
+          </tbody>
+          <tbody id="tec-aprendendo" role="rowgroup">
+            <tr role="row" class="linhas__grupo"><th colspan="3" scope="colgroup" role="columnheader">Estou aprendendo</th></tr>
+            <tr role="row"><th scope="row" role="rowheader">React</th><td role="cell">interfaces</td><td role="cell">front do TaskFlow, Proteínas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== sobre -->
+    <section class="sobre" id="sobre" aria-labelledby="titulo-sobre">
+      <div class="largura">
+        <h2 class="sobre__titulo" id="titulo-sobre" data-revelar>Sobre mim</h2>
+        <p class="sobre__texto" data-revelar>
+          Sou Gustavo Bueno da Silva, desenvolvedor backend autodidata, e programo em Python desde o fim de 2024. Busco minha primeira vaga júnior de backend 100% remota ou um estágio remoto em tecnologia.
+        </p>
+        <div class="sobre__mosaico">
+          <figure class="sobre__mapa" data-revelar>
+            <img src="assets/mapa-lebon-regis.webp" width="1500" height="1002" loading="lazy"
+                 alt="Mapa de Santa Catarina com o município de Lebon Régis destacado em dourado, no meio-oeste do estado" />
+            <p class="sobre__sobre-mapa">Moro em Lebon Régis, Santa Catarina, e estou aberto a mudança de cidade e a viagens.</p>
+          </figure>
+          <div class="sobre__lado">
+            <div class="sobre__azulejo" data-revelar>
+              <p class="sobre__commit">“Postgres subiu”</p>
+              <p class="sobre__commit-nota">Mensagem de commit do TaskFlow, em 1º de julho de 2026. Aprendo construindo, e o histórico dos repositórios mostra cada passo.</p>
+            </div>
+            <dl class="sobre__fatos" data-revelar>
+              <div><dt>Busco</dt><dd>vaga júnior backend remota ou estágio remoto</dd></div>
+              <div><dt>Moro em</dt><dd>Lebon Régis, SC, Brasil</dd></div>
+              <div><dt>Ensino médio</dt><dd>concluo em dezembro de 2026</dd></div>
+              <div><dt>Curso</dt><dd>Desenvolvimento de Software, SC Tec/Senai</dd></div>
+            </dl>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="secao" id="contato" aria-labelledby="titulo-contato">
-      <div class="largura" data-revelar>
-        <h2 class="secao__titulo" id="titulo-contato"><span class="secao__numero">03</span> Contato</h2>
-        <p class="secao__intro">Respondo por e-mail ou WhatsApp.</p>
-        <ul class="contatos">
-          <li>
-            <span class="contatos__rotulo">E-mail</span>
-            <a href="mailto:gustavo.silva123913@gmail.com">gustavo.silva123913@gmail.com</a>
-          </li>
-          <li>
-            <span class="contatos__rotulo">WhatsApp</span>
-            <a href="https://wa.me/5549999615535" target="_blank" rel="noopener noreferrer">Conversar pelo WhatsApp</a>
-          </li>
-          <li>
-            <span class="contatos__rotulo">GitHub</span>
-            <a href="https://github.com/1GustavoBueno1" target="_blank" rel="noopener noreferrer">github.com/1GustavoBueno1</a>
-          </li>
-          <li>
-            <span class="contatos__rotulo">LinkedIn</span>
-            <a href="https://www.linkedin.com/in/gustavo-bueno-da-silva-a351a33bb" target="_blank" rel="noopener noreferrer">Perfil no LinkedIn</a>
-          </li>
-        </ul>
-        <p class="contato__curriculo">
-          <a class="botao botao--cheio" href="assets/curriculo-gustavo-bueno.pdf" download>Baixar currículo (PDF)</a>
-          <span class="todo">TODO: adicionar o PDF em assets/curriculo-gustavo-bueno.pdf</span>
-        </p>
+    <!-- ============================================================= contato -->
+    <section class="contato" id="contato" aria-labelledby="titulo-contato">
+      <div class="largura contato__grade">
+        <div class="contato__topo">
+          <h2 class="contato__titulo" id="titulo-contato">Contato</h2>
+          <p>Escreva sobre vagas júnior de backend, estágio remoto ou qualquer projeto daqui.</p>
+        </div>
+        <a class="contato__email" href="mailto:gustavo.silva123913@gmail.com">
+          <span>gustavo.silva123913</span><span>@gmail.com</span>
+        </a>
+        <div class="contato__base">
+          <ul class="contato__lista">
+            <li><a href="https://wa.me/5549999615535" target="_blank" rel="noopener noreferrer">Conversar pelo WhatsApp</a></li>
+            <li>Lebon Régis, SC</li>
+          </ul>
+          <ul class="contato__lista contato__lista--direita">
+            <li><a href="https://github.com/1GustavoBueno1" target="_blank" rel="noopener noreferrer">github.com/1GustavoBueno1</a></li>
+            <li><a href="https://www.linkedin.com/in/gustavo-bueno-da-silva-a351a33bb" target="_blank" rel="noopener noreferrer">Perfil no LinkedIn</a></li>
+          </ul>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="rodape">
-    <div class="largura rodape__linha">
-      <p>© <span id="ano">2026</span> Gustavo Bueno</p>
-      <a href="#inicio">Voltar ao topo</a>
+    <div class="largura rodape__grade">
+      <div class="rodape__colunas">
+        <ul>
+          <li>Gustavo Bueno</li>
+          <li>Desenvolvedor backend júnior</li>
+          <li>Lebon Régis, SC, Brasil</li>
+        </ul>
+        <ul>
+          <li>Nesta página</li>
+          <li><a href="#projetos">Projetos</a></li>
+          <li><a href="#stack">Tecnologias</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#inicio">Voltar ao topo</a></li>
+        </ul>
+        <ul>
+          <li>Telas</li>
+          <li>Capturas dos sistemas rodando localmente com dados de exemplo.</li>
+        </ul>
+        <ul>
+          <li>Mapa</li>
+          <li>
+            <a href="https://commons.wikimedia.org/w/index.php?curid=1150722" target="_blank" rel="noopener noreferrer">“SantaCatarina Municip LebonRegis”</a>,
+            de Raphael Lorenzeto de Abreu, CC BY 2.5, via Wikimedia Commons. Cores alteradas.
+          </li>
+        </ul>
+      </div>
+      <svg class="rodape__nome" viewBox="0 0 1000 150" role="img" aria-label="Gustavo Bueno" preserveAspectRatio="xMidYMid meet">
+        <text x="500" y="122" text-anchor="middle" textLength="992" lengthAdjust="spacingAndGlyphs">Gustavo Bueno</text>
+      </svg>
+      <p class="rodape__legal">© <span id="ano">2026</span> Gustavo Bueno</p>
     </div>
   </footer>
 </body>
