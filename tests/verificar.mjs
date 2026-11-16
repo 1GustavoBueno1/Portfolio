@@ -300,6 +300,187 @@ teste("conteudo", "pendências (não reprova): arquivos que faltam e TODOs", () 
   })
 );
 
+// ------------------------------------------------------------------- visual
+
+// Luminância relativa e contraste, como define a WCAG 2.
+function paraRgb(cor) {
+  const c = cor.trim();
+  let m = c.match(/^#([0-9a-f]{6})$/i);
+  if (m) return [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16));
+  m = c.match(/^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i);
+  if (m) return [Number(m[1]), Number(m[2]), Number(m[3])];
+  throw new Error(`cor não reconhecida: "${cor}"`);
+}
+
+function luminancia(cor) {
+  const [r, g, b] = paraRgb(cor).map((v) => {
+    const s = v / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contraste(a, b) {
+  const [claro, escuro] = [luminancia(a), luminancia(b)].sort((x, y) => y - x);
+  return (claro + 0.05) / (escuro + 0.05);
+}
+
+const semRolagemHorizontal = (p) =>
+  p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
+
+teste("visual", "contraste AA dos tokens de cor", () =>
+  comPagina({}, async (p) => {
+    const t = await p.evaluate(() => {
+      const estilo = getComputedStyle(document.documentElement);
+      const ler = (n) => estilo.getPropertyValue(n).trim();
+      return Object.fromEntries(
+        ["--fundo", "--superficie", "--texto", "--texto-suave", "--acento", "--sobre-acento"].map((n) => [n, ler(n)])
+      );
+    });
+    exigir(t["--fundo"].toLowerCase() === "#100b18", `--fundo deve ser #100b18, é "${t["--fundo"]}"`);
+    const pares = [
+      ["--fundo", "--texto"], ["--fundo", "--texto-suave"], ["--fundo", "--acento"],
+      ["--superficie", "--texto"], ["--superficie", "--texto-suave"], ["--superficie", "--acento"],
+      ["--acento", "--sobre-acento"],
+    ];
+    for (const [fundo, texto] of pares) {
+      const razao = contraste(t[fundo], t[texto]);
+      exigir(razao >= 4.5, `contraste ${texto} sobre ${fundo} = ${razao.toFixed(2)} (mínimo 4,5)`);
+    }
+  })
+);
+
+teste("visual", "contraste do aviso de TODO e do bloco de código", () =>
+  comPagina({}, async (p) => {
+    const cores = await p.evaluate(() =>
+      ["span.todo", "pre.codigo"].map((sel) => {
+        const e = getComputedStyle(document.querySelector(sel));
+        return { sel, cor: e.color, fundo: e.backgroundColor };
+      })
+    );
+    for (const c of cores) {
+      exigir(!/rgba\(0, 0, 0, 0\)/.test(c.fundo), `${c.sel} precisa de cor de fundo própria`);
+      const razao = contraste(c.cor, c.fundo);
+      exigir(razao >= 4.5, `${c.sel}: contraste ${razao.toFixed(2)} (mínimo 4,5)`);
+    }
+  })
+);
+
+for (const largura of [320, 360, 768, 1280]) {
+  teste("visual", `sem rolagem horizontal em ${largura} px`, () =>
+    comPagina({ largura }, async (p) => {
+      exigir(await semRolagemHorizontal(p), `a página rola na horizontal em ${largura} px`);
+    })
+  );
+}
+
+teste("visual", "em 320 px o trecho de código rola dentro do próprio bloco", () =>
+  comPagina({ largura: 320 }, async (p) => {
+    const pre = await p.$eval("pre.codigo", (e) => ({
+      rola: e.scrollWidth > e.clientWidth,
+      overflow: getComputedStyle(e).overflowX,
+    }));
+    exigir(pre.overflow === "auto", `pre.codigo com overflow-x "${pre.overflow}" (esperado "auto")`);
+    exigir(pre.rola, "pre.codigo deveria ter conteúdo mais largo que o bloco em 320 px");
+  })
+);
+
+const caixasDosCards = (p) =>
+  p.$$eval("article.projeto", (as) =>
+    as.map((a) => {
+      const r = a.getBoundingClientRect();
+      return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width) };
+    })
+  );
+
+teste("visual", "em 1280 px: TaskFlow na largura toda, os outros em duas colunas", () =>
+  comPagina({ largura: 1280 }, async (p) => {
+    const grade = await p.$eval(".projetos", (e) => Math.round(e.getBoundingClientRect().width));
+    const [principal, c2, c3, c4, c5] = await caixasDosCards(p);
+    exigir(Math.abs(principal.w - grade) <= 2, `TaskFlow com ${principal.w}px, grade com ${grade}px`);
+    exigir(c2.y === c3.y && c2.x < c3.x, "cards 2 e 3 deveriam ficar lado a lado");
+    exigir(c4.y === c5.y && c4.x < c5.x, "cards 4 e 5 deveriam ficar lado a lado");
+    exigir(c2.w < grade / 2 + 2, "cards da grade deveriam ocupar meia largura");
+  })
+);
+
+teste("visual", "em 360 px: os cinco cards em uma coluna", () =>
+  comPagina({ largura: 360 }, async (p) => {
+    const cards = await caixasDosCards(p);
+    exigir(new Set(cards.map((c) => c.x)).size === 1, "os cards deveriam ter a mesma margem esquerda");
+    for (let i = 1; i < cards.length; i++) exigir(cards[i].y > cards[i - 1].y, "os cards deveriam ficar empilhados");
+  })
+);
+
+teste("visual", "primeiro Tab foca o link de pular, visível na tela", () =>
+  comPagina({}, async (p) => {
+    const antes = await p.$eval("a.pular", (e) => e.getBoundingClientRect().bottom);
+    exigir(antes <= 0, "o link de pular deve ficar fora da tela até receber foco");
+    await p.keyboard.press("Tab");
+    await p.waitForTimeout(300); // o link desliza para dentro da tela em 0,15 s
+    const foco = await p.evaluate(() => {
+      const e = document.activeElement;
+      const r = e.getBoundingClientRect();
+      return { pular: e.matches("a.pular"), topo: r.top, base: r.bottom, esquerda: r.left };
+    });
+    exigir(foco.pular, "o primeiro foco deve ser o link de pular");
+    exigir(foco.topo >= 0 && foco.esquerda >= 0 && foco.base > foco.topo, "o link de pular deve aparecer na tela ao receber foco");
+  })
+);
+
+teste("visual", "foco visível em links e botões", () =>
+  comPagina({}, async (p) => {
+    for (let i = 0; i < 8; i++) {
+      await p.keyboard.press("Tab");
+      const f = await p.evaluate(() => {
+        const e = document.activeElement;
+        const s = getComputedStyle(e);
+        return { quem: e.textContent.trim().slice(0, 30), largura: parseFloat(s.outlineWidth), estilo: s.outlineStyle };
+      });
+      exigir(f.estilo !== "none" && f.largura >= 2, `"${f.quem}": outline ${f.estilo} ${f.largura}px (mínimo 2px)`);
+    }
+  })
+);
+
+const movimentoDosRevelados = (p) =>
+  p.evaluate(() => {
+    document.documentElement.classList.add("revelar-pronto");
+    const duracoes = [...document.querySelectorAll("[data-revelar]")].map((e) => {
+      const s = getComputedStyle(e);
+      return Math.max(...s.transitionDuration.split(",").map(parseFloat), ...s.animationDuration.split(",").map(parseFloat));
+    });
+    return { maior: Math.max(...duracoes), rolagem: getComputedStyle(document.documentElement).scrollBehavior };
+  });
+
+teste("visual", "movimento reduzido desliga transições e rolagem suave", async () => {
+  const normal = await comPagina({}, movimentoDosRevelados);
+  exigir(normal.maior > 0, "sem preferência, os blocos deveriam ter transição de entrada");
+  exigir(normal.rolagem === "smooth", "sem preferência, a rolagem deveria ser suave");
+  const reduzido = await comPagina({ movimentoReduzido: true }, movimentoDosRevelados);
+  exigir(reduzido.maior === 0, `com movimento reduzido ainda há transição de ${reduzido.maior}s`);
+  exigir(reduzido.rolagem === "auto", "com movimento reduzido a rolagem deve ser imediata");
+});
+
+teste("visual", "fonte dobrada em 640 px não corta nem estoura texto", () =>
+  comPagina({ largura: 640 }, async (p) => {
+    await p.evaluate(() => (document.documentElement.style.fontSize = "200%"));
+    exigir(await semRolagemHorizontal(p), "a página rola na horizontal com a fonte dobrada");
+    const estourados = await p.$$eval("h1, h2, h3, p, li, a, span, figcaption", (es) =>
+      es
+        .filter((e) => !e.closest("pre") && e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).display !== "inline")
+        .map((e) => e.textContent.trim().slice(0, 40))
+    );
+    exigir(estourados.length === 0, `texto estourando: ${estourados.join(" | ")}`);
+  })
+);
+
+teste("visual", "fonte Manrope aplicada ao corpo", () =>
+  comPagina({}, async (p) => {
+    const familia = await p.evaluate(() => getComputedStyle(document.body).fontFamily);
+    exigir(/^"?Manrope"?/.test(familia), `font-family do body começa com ${familia.split(",")[0]}`);
+  })
+);
+
 // ----------------------------------------------------------------- execução
 
 const grupoPedido = process.argv[2];

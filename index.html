@@ -93,7 +93,10 @@
               <!-- TODO: linkar o front em React (TaskFlow-API-FrontEnd) depois de trocar o token fixo pelo token do login. -->
             </div>
             <figure class="projeto__codigo">
-              <pre class="codigo" tabindex="0" aria-label="Trecho da API: edição de tarefa com checagem de dono"><code>@rotas_tarefas.put("/editar_tarefa/{id_tarefa}", response_model=SaidaDaTarefa)
+              <pre class="codigo" tabindex="0" aria-label="Trecho da API: edição de tarefa com checagem de dono"><code>@rotas_tarefas.put(
+    "/editar_tarefa/{id_tarefa}",
+    response_model=SaidaDaTarefa,
+)
 def editar_tarefas(
     id_tarefa: int,
     dados: EditarTarefas,
@@ -105,7 +108,10 @@ def editar_tarefas(
         Tasks.user_id == usuario.id,
     ).first()
     if not tarefa:
-        raise HTTPException(status_code=404, detail="Tarefa não encontrada")
+        raise HTTPException(
+            status_code=404,
+            detail="Tarefa não encontrada",
+        )
     campos = dados.model_dump(exclude_unset=True)
     for chave, valor in campos.items():
         setattr(tarefa, chave, valor)
@@ -183,7 +189,7 @@ def editar_tarefas(
               <li>Login com JWT e dois perfis, ADMIN e FUNCIONARIO. Rotas como cadastrar cliente ou excluir automação exigem ADMIN.</li>
               <li>16 endpoints para usuários, clientes, automações e jobs, com os status PENDENTE, PROCESSANDO, CONCLUIDO e ERRO.</li>
               <li>PostgreSQL 16 em Docker Compose, migrations em SQL e queries parametrizadas com o driver <code>pg</code>.</li>
-              <li>Limitações: o status do job é atualizado pela API, porque ainda não há worker nem testes automatizados, e o front foi feito com apoio de IA.</li>
+              <li>Limitações: ainda não há worker (o status do job é atualizado pela API) nem testes automatizados, e o front foi feito com apoio de IA.</li>
             </ul>
             <ul class="tags" aria-label="Tecnologias do Sistema de Automação Empresarial">
               <li>Node.js</li><li>TypeScript</li><li>Express</li><li>PostgreSQL</li><li>Docker</li><li>JWT</li>
