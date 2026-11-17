@@ -128,7 +128,7 @@ teste("conteudo", "um único h1, com o nome", () =>
 teste("conteudo", "frases obrigatórias e frases proibidas", () =>
   comPagina({}, async (p) => {
     const texto = (await p.locator("body").innerText()).toLowerCase();
-    for (const frase of ["Buscando vaga júnior backend remota", "fim de 2024", "cerca de 42 unidades", "8 endpoints", "© 2026"]) {
+    for (const frase of ["Buscando vaga backend remota", "fim de 2024", "cerca de 42 unidades", "8 endpoints", "© 2026"]) {
       exigir(texto.includes(frase.toLowerCase()), `falta o texto "${frase}"`);
     }
     const html = (await p.content()).toLowerCase();
